@@ -1,6 +1,7 @@
 package edu.ib.kotlindb
 
 import DatabaseHandler
+import ItemAdapter
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -28,7 +30,20 @@ class MainActivity : AppCompatActivity() {
 
             addRecord()
         }
+        setupListofDataIntoRecyclerView()
 
+    }
+
+    /**
+     * Function is used to get the Items List from the database table.
+     */
+    private fun getItemsList(): ArrayList<EmpModelClass> {
+        //creating the instance of DatabaseHandler class
+        val databaseHandler: DatabaseHandler = DatabaseHandler(this)
+        //calling the viewEmployee method of DatabaseHandler class to read the records
+        val empList: ArrayList<EmpModelClass> = databaseHandler.viewEmployee()
+
+        return empList
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,14 +77,83 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
                 etName.text.clear()
                 etEmailId.text.clear()
+
+                setupListofDataIntoRecyclerView()
             }
         } else {
             Toast.makeText(
                 applicationContext,
-                "Name or Email cannot be blank",
+                "Label of Description cannot be blank",
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    /**
+     * Function is used to show the list on UI of inserted data.
+     */
+    private fun setupListofDataIntoRecyclerView() {
+        val rvItemsList: RecyclerView = findViewById(R.id.rvItemsList)
+        val tvNoRecordsAvailable: TextView = findViewById(R.id.tvNoRecordsAvailable)
+
+        if (getItemsList().size > 0) {
+
+            rvItemsList.visibility = View.VISIBLE
+            tvNoRecordsAvailable.visibility = View.GONE
+
+            // Set the LayoutManager that this RecyclerView will use.
+            rvItemsList.layoutManager = LinearLayoutManager(this)
+            // Adapter class is initialized and list is passed in the param.
+            val itemAdapter = ItemAdapter(this, getItemsList())
+            // adapter instance is set to the recyclerview to inflate the items.
+            rvItemsList.adapter = itemAdapter
+        } else {
+
+            rvItemsList.visibility = View.GONE
+            tvNoRecordsAvailable.visibility = View.VISIBLE
+        }
+    }
+
+
+    /**
+     * Method is used to show the Alert Dialog.
+     */
+    fun deleteRecordAlertDialog(empModelClass: EmpModelClass) {
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle("Delete Record")
+        //set message for alert dialog
+        builder.setMessage("Are you sure you wants to delete ${empModelClass.name}.")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //performing positive action
+        builder.setPositiveButton("Yes") { dialogInterface, which ->
+
+            //creating the instance of DatabaseHandler class
+            val databaseHandler: DatabaseHandler = DatabaseHandler(this)
+            //calling the deleteEmployee method of DatabaseHandler class to delete record
+            val status = databaseHandler.deleteEmployee(EmpModelClass(empModelClass.id, "", ""))
+            if (status > -1) {
+                Toast.makeText(
+                    applicationContext,
+                    "Record deleted successfully.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                setupListofDataIntoRecyclerView()
+            }
+
+            dialogInterface.dismiss() // Dialog will be dismissed
+        }
+        //performing negative action
+        builder.setNegativeButton("No") { dialogInterface, which ->
+            dialogInterface.dismiss() // Dialog will be dismissed
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCancelable(false) // Will not allow user to cancel after clicking on remaining screen area.
+        alertDialog.show()  // show the dialog to UI
     }
 
 
