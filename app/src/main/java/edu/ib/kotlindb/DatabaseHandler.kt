@@ -104,4 +104,25 @@ class DatabaseHandler(context: Context) :
         db.close()
         return success
     }
+
+
+    fun getAllIngredients(): java.util.ArrayList<HashMap<String, String>> {
+        val proList: java.util.ArrayList<HashMap<String, String>>
+        proList = java.util.ArrayList()
+        val selectQuery = "SELECT  * FROM $TABLE_CONTACTS"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                //Id, Company,Name,Price
+                val map = HashMap<String, String>()
+                map["_id"] = cursor.getString(0)
+                map["name"] = cursor.getString(1)
+                map["email"] = cursor.getString(2)
+                proList.add(map)
+            } while (cursor.moveToNext())
+        }
+
+        return proList
+    }
 }

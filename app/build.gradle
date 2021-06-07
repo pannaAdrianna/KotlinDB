@@ -44,4 +44,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'org.apache.commons:commons-csv:1.5'
+    //gradle kotlin DSL
+    implementation 'com.github.doyaaaaaken:kotlin-csv-jvm:0.15.2'
+    implementation 'com.opencsv:opencsv:4.6'
 }

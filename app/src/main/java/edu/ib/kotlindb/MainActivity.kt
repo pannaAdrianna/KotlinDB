@@ -2,22 +2,33 @@ package edu.ib.kotlindb
 
 import DatabaseHandler
 import ItemAdapter
-import android.app.Dialog
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.opencsv.CSVReaderHeaderAware
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.FileReader
+import java.io.InputStreamReader
+
 
 class MainActivity : AppCompatActivity() {
+    internal lateinit var databaseHandler: DatabaseHandler
+    internal lateinit var empList: ArrayList<EmpModelClass>
+    internal lateinit var rvItemsList: RecyclerView
+    val requestCSVcode = 1
+    internal lateinit var myList: ArrayList<HashMap<String, String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupListofDataIntoRecyclerView()
 
+
     }
 
     /**
@@ -39,9 +51,9 @@ class MainActivity : AppCompatActivity() {
      */
     private fun getItemsList(): ArrayList<EmpModelClass> {
         //creating the instance of DatabaseHandler class
-        val databaseHandler: DatabaseHandler = DatabaseHandler(this)
+        databaseHandler = DatabaseHandler(this)
         //calling the viewEmployee method of DatabaseHandler class to read the records
-        val empList: ArrayList<EmpModelClass> = databaseHandler.viewEmployee()
+        empList = databaseHandler.viewEmployee()
 
         return empList
     }
@@ -69,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
         val name = etName.text.toString()
         val email = etEmailId.text.toString()
-        val databaseHandler: DatabaseHandler = DatabaseHandler(this)
+        databaseHandler = DatabaseHandler(this)
         if (!name.isEmpty() && !email.isEmpty()) {
             val status =
                 databaseHandler.addEmployee(EmpModelClass(0, name, email))
@@ -93,25 +105,64 @@ class MainActivity : AppCompatActivity() {
      * Function is used to show the list on UI of inserted data.
      */
     private fun setupListofDataIntoRecyclerView() {
-        val rvItemsList: RecyclerView = findViewById(R.id.rvItemsList)
+        rvItemsList = findViewById(R.id.rvItemsList)
         val tvNoRecordsAvailable: TextView = findViewById(R.id.tvNoRecordsAvailable)
 
-        if (getItemsList().size > 0) {
-
-            rvItemsList.visibility = View.VISIBLE
-            tvNoRecordsAvailable.visibility = View.GONE
-
-            // Set the LayoutManager that this RecyclerView will use.
-            rvItemsList.layoutManager = LinearLayoutManager(this)
-            // Adapter class is initialized and list is passed in the param.
-            val itemAdapter = ItemAdapter(this, getItemsList())
-            // adapter instance is set to the recyclerview to inflate the items.
-            rvItemsList.adapter = itemAdapter
-        } else {
-
-            rvItemsList.visibility = View.GONE
-            tvNoRecordsAvailable.visibility = View.VISIBLE
+        if (getItemsList().size == 0) {
+            readFromCSV()
         }
+
+
+
+        rvItemsList.visibility = View.VISIBLE
+        tvNoRecordsAvailable.visibility = View.GONE
+
+        // Set the LayoutManager that this RecyclerView will use.
+        rvItemsList.layoutManager = LinearLayoutManager(this)
+        // Adapter class is initialized and list is passed in the param.
+        val itemAdapter = ItemAdapter(this, getItemsList())
+        // adapter instance is set to the recyclerview to inflate the items.
+        rvItemsList.adapter = itemAdapter
+
+//            databaseHandler.addEmployee(EmpModelClass(0, "test1", "test1mail"))
+
+
+    }
+
+
+    fun readFromCSV() {
+        Log.d("My Activity", "Starting read from csv ");
+
+        val minput = InputStreamReader(assets.open("data.csv"))
+        val reader = BufferedReader(minput)
+
+        var line: String
+        var displayData: String = ""
+
+        var i: Int = 0
+        while (reader.readLine().also { line = it } != null) {
+            i += 1
+            val row: List<String> = line.split(';')
+            displayData = displayData + row[0] + "\t" + row[1] + "\n"
+            databaseHandler.addEmployee(EmpModelClass(i + 1, row[0], row[1]))
+        }
+
+
+//        while (line != null) {
+//
+//            val tokens = line.split(";")
+//            if (tokens.size > 0) {
+//                i += 1
+//
+//                label = tokens[0]
+//                function = tokens[1]
+//                description = tokens[2]
+//
+//                databaseHandler.addEmployee(EmpModelClass(i + 1, label, function))
+//
+//            }
+
+
     }
 
 
@@ -130,7 +181,7 @@ class MainActivity : AppCompatActivity() {
         builder.setPositiveButton("Yes") { dialogInterface, which ->
 
             //creating the instance of DatabaseHandler class
-            val databaseHandler: DatabaseHandler = DatabaseHandler(this)
+            databaseHandler = DatabaseHandler(this)
             //calling the deleteEmployee method of DatabaseHandler class to delete record
             val status = databaseHandler.deleteEmployee(EmpModelClass(empModelClass.id, "", ""))
             if (status > -1) {

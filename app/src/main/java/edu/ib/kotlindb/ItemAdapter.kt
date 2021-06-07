@@ -84,7 +84,7 @@ class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
 
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvEmail: TextView = view.findViewById(R.id.tvEmail)
-        val ivEdit: ImageView = view.findViewById(R.id.ivEdit)
+
         val ivDelete: ImageView = view.findViewById(R.id.ivDelete)
     }
 }
