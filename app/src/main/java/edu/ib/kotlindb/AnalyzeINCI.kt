@@ -6,6 +6,7 @@ import android.view.View
 
 class AnalyzeINCI : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_analyze_i_n_c_i)
     }
