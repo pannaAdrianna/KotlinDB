@@ -13,4 +13,11 @@
     <color name="white">#FFFF</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorLightGray">#EBEBEB</color>
+
+    <color name="blueLight"> #add8e6 </color>
+    <color name="backgorundColor">#83976D</color>
+    <color name="dashboardBackground">#42493A</color>
+    <color name="cardBackgorund">#83976D</color>
+    <color name="accent">#42493A</color>
+    <color name="icons">#42493A</color>
 </resources>

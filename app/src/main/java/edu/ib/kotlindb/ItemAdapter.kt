@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.EmpModelClass
-import edu.ib.kotlindb.MainActivity
+import edu.ib.kotlindb.ListActivity
 import edu.ib.kotlindb.R
 
 class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
@@ -61,7 +61,7 @@ class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
 
         holder.ivDelete.setOnClickListener { view ->
 
-            if (context is MainActivity) {
+            if (context is ListActivity) {
                 context.deleteRecordAlertDialog(item)
             }
         }
@@ -84,7 +84,6 @@ class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
 
         val tvName: TextView = view.findViewById(R.id.tvName)
         val tvEmail: TextView = view.findViewById(R.id.tvEmail)
-
         val ivDelete: ImageView = view.findViewById(R.id.ivDelete)
     }
 }
