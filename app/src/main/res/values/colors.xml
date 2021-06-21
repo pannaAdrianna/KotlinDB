@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#04513f</color>
+    <color name="colorPrimary">#2A5744</color>
     <color name="colorPrimaryDark">#79a189</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="purple_700">#03DAC5</color>
@@ -15,9 +15,9 @@
     <color name="colorLightGray">#EBEBEB</color>
 
     <color name="blueLight"> #add8e6 </color>
-    <color name="backgorundColor">#83976D</color>
-    <color name="dashboardBackground">#42493A</color>
-    <color name="cardBackgorund">#83976D</color>
+    <color name="backgorundColor">#55836e</color>
+    <color name="dashboardBackground">#002d1c</color>
+    <color name="cardBackgorund">#55836e</color>
     <color name="accent">#42493A</color>
-    <color name="icons">#42493A</color>
+    <color name="icons">#002d1c</color>
 </resources>

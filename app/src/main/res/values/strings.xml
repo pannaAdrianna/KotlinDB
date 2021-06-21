@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KotlinDB</string>
+    <string name="app_name">INCI App</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -17,7 +17,7 @@
     <string name="hintGetDataBtn">INGREDIENT LIST</string>
     <string name="hintETIncianalyzer">Paste your INCI here</string>
     <string name="hintBtnDoctor">KONSULTACJE</string>
-    <string name="hintBtnAccount">KONTO</string>
+    <string name="hintBtnAccount">ACCOUNT</string>
     <string name="hintBtnAnalyze">ANALYZE</string>
     <string name="tvINCIpaste">INGREDIENTS:</string>
     <string name="hintTvControversial">Add ingredients and click Analyze button to start analyzing</string>
