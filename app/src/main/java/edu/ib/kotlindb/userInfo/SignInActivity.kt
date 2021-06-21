@@ -1,12 +1,13 @@
-package edu.ib.kotlindb
+package edu.ib.kotlindb.userInfo
 
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import edu.ib.kotlindb.activities.MainActivity
+import edu.ib.kotlindb.R
 
 class SignInActivity : AppCompatActivity() {
 

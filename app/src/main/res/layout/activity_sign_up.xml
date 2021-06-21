@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@mipmap/bg_launcher_background"
     android:padding="40dp"
-    tools:context=".SignUpActivity">
+    tools:context=".userInfo.SignUpActivity">
 
 
     <TextView

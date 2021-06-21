@@ -4,7 +4,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
-import edu.ib.kotlindb.EmpModelClass
+import edu.ib.kotlindb.database.EmpModelClass
 
 //creating the database logic, extending the SQLiteOpenHelper base class
 class DatabaseHandler(context: Context) :
@@ -110,7 +110,11 @@ class DatabaseHandler(context: Context) :
                 name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 email = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
 
-                val emp = EmpModelClass(id = id, label = name, description = email)
+                val emp = EmpModelClass(
+                    id = id,
+                    label = name,
+                    description = email
+                )
                 empList.add(emp)
 
             } while (cursor.moveToNext())
@@ -148,7 +152,11 @@ class DatabaseHandler(context: Context) :
                 name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 email = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
 
-                val emp = EmpModelClass(id = id, label = name, description = email)
+                val emp = EmpModelClass(
+                    id = id,
+                    label = name,
+                    description = email
+                )
                 empList.add(emp)
 
             } while (cursor.moveToNext())

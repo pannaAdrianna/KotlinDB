@@ -1,7 +1,8 @@
-package edu.ib.kotlindb
+package edu.ib.kotlindb.activities
 
 import DatabaseHandler
 import ItemAdapter
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,14 +12,12 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import edu.ib.kotlindb.R
+import edu.ib.kotlindb.database.EmpModelClass
 
-
-class ListActivity : AppCompatActivity() {
+class PersonalizedList : AppCompatActivity() {
     internal lateinit var databaseHandler: DatabaseHandler
     internal lateinit var empList: ArrayList<EmpModelClass>
     internal lateinit var rvItemsList: RecyclerView
@@ -27,16 +26,15 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list)
-//        setSupportActionBar(findViewById(R.id.toolbar))
+        setContentView(R.layout.activity_personalized_list)
         getSupportActionBar()?.hide()
         val btnAdd = findViewById<Button>(R.id.btnAdd)
 
         // Click even of the add button.
-//        btnAdd.setOnClickListener { view ->
-//
-//            addRecord()
-//        }
+        btnAdd.setOnClickListener { view ->
+
+            addRecord()
+        }
         setupListofDataIntoRecyclerView()
 
 
@@ -49,7 +47,7 @@ class ListActivity : AppCompatActivity() {
         //creating the instance of DatabaseHandler class
         databaseHandler = DatabaseHandler(this)
         //calling the viewEmployee method of DatabaseHandler class to read the records
-        empList = databaseHandler.viewEmployee()
+        empList = databaseHandler.viewIngredient()
 
         return empList
     }
@@ -80,7 +78,13 @@ class ListActivity : AppCompatActivity() {
         databaseHandler = DatabaseHandler(this)
         if (!name.isEmpty() && !email.isEmpty()) {
             val status =
-                databaseHandler.addEmployee(EmpModelClass(0, name, email))
+                databaseHandler.addIngredient(
+                    EmpModelClass(
+                        0,
+                        name,
+                        email
+                    )
+                )
             if (status > -1) {
                 Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
                 etName.text.clear()
@@ -104,9 +108,6 @@ class ListActivity : AppCompatActivity() {
         rvItemsList = findViewById(R.id.rvItemsList)
         val tvNoRecordsAvailable: TextView = findViewById(R.id.tvNoRecordsAvailable)
 
-        if (getItemsList().size == 0) {
-            readFromCSV()
-        }
 
         rvItemsList.visibility = View.VISIBLE
         tvNoRecordsAvailable.visibility = View.GONE
@@ -120,25 +121,7 @@ class ListActivity : AppCompatActivity() {
     }
 
 
-    fun readFromCSV() {
 
-
-        val minput = InputStreamReader(assets.open("data.csv"))
-        val reader = BufferedReader(minput)
-
-        var line: String
-        var displayData: String = ""
-
-        var i: Int = 0
-        while (reader.readLine().also { line = it } != null) {
-            i += 1
-            val row: List<String> = line.split(';')
-            displayData = displayData + row[0] + "\t" + row[1] + "\n"
-            databaseHandler.addEmployee(EmpModelClass(i + 1, row[0], row[1]))
-        }
-
-
-    }
 
 
     /**
@@ -158,7 +141,13 @@ class ListActivity : AppCompatActivity() {
             //creating the instance of DatabaseHandler class
             databaseHandler = DatabaseHandler(this)
             //calling the deleteEmployee method of DatabaseHandler class to delete record
-            val status = databaseHandler.deleteEmployee(EmpModelClass(empModelClass.id, "", ""))
+            val status = databaseHandler.deleteIngredient(
+                EmpModelClass(
+                    empModelClass.id,
+                    "",
+                    ""
+                )
+            )
             if (status > -1) {
                 Toast.makeText(
                     applicationContext,
@@ -181,6 +170,5 @@ class ListActivity : AppCompatActivity() {
         alertDialog.setCancelable(false) // Will not allow user to cancel after clicking on remaining screen area.
         alertDialog.show()  // show the dialog to UI
     }
-
 
 }

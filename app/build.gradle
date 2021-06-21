@@ -93,6 +93,11 @@ dependencies {
     implementation 'com.opencsv:opencsv:4.6'
 
 
+    // OCR Activity
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+
+
 
 
 }

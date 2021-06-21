@@ -1,4 +1,4 @@
-package edu.ib.kotlindb
+package edu.ib.kotlindb.activities
 
 import DatabaseHandler
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import edu.ib.kotlindb.R
+import edu.ib.kotlindb.database.EmpModelClass
 
 
 class AnalyzeActivity : AppCompatActivity() {
@@ -33,6 +35,9 @@ class AnalyzeActivity : AppCompatActivity() {
 
         etIngredients.text.clear()
         results.clear()
+        val intent = intent
+        val message = intent.getStringExtra(OCRActivity.MESSAGE)
+        etIngredients.setText(message)
 
 
         btnAnalyze.setOnClickListener { view ->

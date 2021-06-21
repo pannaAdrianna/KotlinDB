@@ -1,4 +1,4 @@
-package edu.ib.kotlindb
+package edu.ib.kotlindb.userInfo
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import edu.ib.kotlindb.activities.PersonalizedList
+import edu.ib.kotlindb.R
 
 class AccountDashboard : AppCompatActivity() {
 
