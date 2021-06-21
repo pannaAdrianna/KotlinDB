@@ -46,13 +46,13 @@ class AnalyzeActivity : AppCompatActivity() {
 
                 val array = test.trim().split(",").toTypedArray()
                 Log.i("AnalyzeActivity", array[0].toString())
-                println(array)
+
 
                 for (ingToCheck in array) {
-                    println(ingToCheck)
+
                     for (ingredient in empList) {
                         var name = ingredient.label.trim()
-                        if (ingToCheck.equals(name, ignoreCase = true) and (name !in results)) {
+                        if (ingToCheck.replace(" ","").equals(name, ignoreCase = true) and (name !in results)) {
                                 results.add(name)
 
                         }
@@ -63,6 +63,7 @@ class AnalyzeActivity : AppCompatActivity() {
                 val resultDisplay = StringBuilder()
                 for (str in results) resultDisplay.append("$str, ")
                 tvResult.text = resultDisplay
+                results.clear()
 
             }
 
