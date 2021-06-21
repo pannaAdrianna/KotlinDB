@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onBtnSearchIngredient(view: View) {
-        val intent = Intent(this, ListActivity::class.java)
+        val intent = Intent(this, TestList::class.java)
         this.startActivity(intent)
 
 
