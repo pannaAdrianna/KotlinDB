@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.EmpModelClass
 import edu.ib.kotlindb.ListActivity
+import edu.ib.kotlindb.PersonalizedList
 import edu.ib.kotlindb.R
 
 class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
@@ -44,8 +45,8 @@ class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
 
         val item = items.get(position)
 
-        holder.tvName.text = item.name
-        holder.tvEmail.text = item.email
+        holder.tvName.text = item.label
+        holder.tvEmail.text = item.description
 
         // Updating the background color according to the odd/even positions in list.
         if (position % 2 == 0) {
@@ -62,6 +63,10 @@ class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
         holder.ivDelete.setOnClickListener { view ->
 
             if (context is ListActivity) {
+                context.deleteRecordAlertDialog(item)
+            }
+
+            if (context is PersonalizedList) {
                 context.deleteRecordAlertDialog(item)
             }
         }

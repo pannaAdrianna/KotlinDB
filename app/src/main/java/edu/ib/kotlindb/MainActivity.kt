@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     }
     fun onBtnAnalyzeClick(view: View) {
-        val intent = Intent(this, AnalyzeINCI::class.java)
+        val intent = Intent(this, AnalyzeActivity::class.java)
         this.startActivity(intent)
     }
 

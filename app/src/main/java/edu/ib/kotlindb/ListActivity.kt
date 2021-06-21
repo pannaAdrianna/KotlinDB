@@ -33,10 +33,10 @@ class ListActivity : AppCompatActivity() {
         val btnAdd = findViewById<Button>(R.id.btnAdd)
 
         // Click even of the add button.
-        btnAdd.setOnClickListener { view ->
-
-            addRecord()
-        }
+//        btnAdd.setOnClickListener { view ->
+//
+//            addRecord()
+//        }
         setupListofDataIntoRecyclerView()
 
 
@@ -149,7 +149,7 @@ class ListActivity : AppCompatActivity() {
         //set title for alert dialog
         builder.setTitle("Delete Record")
         //set message for alert dialog
-        builder.setMessage("Are you sure you wants to delete ${empModelClass.name}.")
+        builder.setMessage("Are you sure you wants to delete ${empModelClass.label}.")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         //performing positive action

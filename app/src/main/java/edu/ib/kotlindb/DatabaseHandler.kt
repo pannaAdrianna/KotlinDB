@@ -50,8 +50,8 @@ class DatabaseHandler(context: Context) :
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(KEY_NAME, emp.name) // EmpModelClass Name
-        contentValues.put(KEY_EMAIL, emp.email) // EmpModelClass Email
+        contentValues.put(KEY_NAME, emp.label) // EmpModelClass Name
+        contentValues.put(KEY_EMAIL, emp.description) // EmpModelClass Email
 
         // Inserting employee details using insert query.
         val success = db.insert(TABLE_CONTACTS, null, contentValues)
@@ -68,8 +68,8 @@ class DatabaseHandler(context: Context) :
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(KEY_NAME, emp.name) // EmpModelClass Name
-        contentValues.put(KEY_EMAIL, emp.email) // EmpModelClass Email
+        contentValues.put(KEY_NAME, emp.label) // EmpModelClass Name
+        contentValues.put(KEY_EMAIL, emp.description) // EmpModelClass Email
 
         // Inserting employee details using insert query.
         val success = db.insert(TABLE_PREGGO, null, contentValues)
@@ -110,7 +110,7 @@ class DatabaseHandler(context: Context) :
                 name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 email = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
 
-                val emp = EmpModelClass(id = id, name = name, email = email)
+                val emp = EmpModelClass(id = id, label = name, description = email)
                 empList.add(emp)
 
             } while (cursor.moveToNext())
@@ -148,7 +148,7 @@ class DatabaseHandler(context: Context) :
                 name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 email = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
 
-                val emp = EmpModelClass(id = id, name = name, email = email)
+                val emp = EmpModelClass(id = id, label = name, description = email)
                 empList.add(emp)
 
             } while (cursor.moveToNext())

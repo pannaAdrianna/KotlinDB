@@ -14,8 +14,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 class PersonalizedList : AppCompatActivity() {
     internal lateinit var databaseHandler: DatabaseHandler
@@ -126,7 +124,7 @@ class PersonalizedList : AppCompatActivity() {
         //set title for alert dialog
         builder.setTitle("Delete Record")
         //set message for alert dialog
-        builder.setMessage("Are you sure you wants to delete ${empModelClass.name}.")
+        builder.setMessage("Are you sure you wants to delete ${empModelClass.label}.")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         //performing positive action

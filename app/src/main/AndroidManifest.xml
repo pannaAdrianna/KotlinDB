@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinDB">
-        <activity android:name=".PersonalizedList"></activity>
+        <activity android:name=".AnalyzeActivity"></activity>
+        <activity android:name=".PersonalizedList" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".AccountDashboard" />
         <activity android:name=".AnalyzeINCI" />
