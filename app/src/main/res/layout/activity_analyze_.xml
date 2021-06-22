@@ -58,8 +58,8 @@
 
             <Switch
                 android:id="@+id/preggoSwitch"
-                android:layout_width="108dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
                 android:text="Personalized mode"
                 android:textSize="15sp"></Switch>
 
