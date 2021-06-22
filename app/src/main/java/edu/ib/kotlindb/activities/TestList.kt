@@ -23,6 +23,7 @@ class TestList : AppCompatActivity() {
 
     internal lateinit var databaseHandler: DatabaseHandler
     internal lateinit var empList: ArrayList<EmpModelClass>
+
     internal lateinit var rvItemsList: RecyclerView
     internal var searchView: SearchView? = null
     val requestCSVcode = 1
@@ -37,7 +38,7 @@ class TestList : AppCompatActivity() {
         rvItemsList =  findViewById(R.id.rvItemsBasicList)
         searchView = findViewById(R.id.search_bar)
         setupListofDataIntoRecyclerView()
-        adapter = BasicAdapter(this,getItemsList())
+        adapter = BasicAdapter(this,getBasicItemsList())
         rvItemsList.setAdapter(adapter);
 
 
@@ -47,7 +48,7 @@ class TestList : AppCompatActivity() {
     /**
      * Function is used to get the Items List from the database table.
      */
-    private fun getItemsList(): ArrayList<EmpModelClass> {
+    private fun getBasicItemsList(): ArrayList<EmpModelClass> {
         //creating the instance of DatabaseHandler class
         databaseHandler = DatabaseHandler(this)
         //calling the viewEmployee method of DatabaseHandler class to read the records
@@ -55,6 +56,7 @@ class TestList : AppCompatActivity() {
 
         return empList
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -84,14 +86,14 @@ class TestList : AppCompatActivity() {
         rvItemsList = findViewById(R.id.rvItemsBasicList)
         val tvNoRecordsAvailable: TextView = findViewById(R.id.tvNoRecordsAvailable)
 
-        if (getItemsList().size == 0) {
+        if (getBasicItemsList().size == 0) {
             readFromCSV()
         }
 
         rvItemsList.visibility = View.VISIBLE
         tvNoRecordsAvailable.visibility = View.GONE
         rvItemsList.layoutManager = LinearLayoutManager(this)
-        val itemAdapter = BasicAdapter(this, getItemsList())
+        val itemAdapter = BasicAdapter(this, getBasicItemsList())
         rvItemsList.adapter = itemAdapter
 
 
