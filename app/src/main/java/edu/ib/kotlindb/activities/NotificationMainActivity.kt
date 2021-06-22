@@ -12,11 +12,14 @@ import android.widget.Button
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.util.Util
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import edu.ib.kotlindb.AlarmReceiver
 import edu.ib.kotlindb.R
 import edu.ib.kotlindb.databinding.ActivityNotificationMainBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -65,10 +68,11 @@ class NotificationMainActivity : AppCompatActivity() {
     }
 
     private fun showPicker() {
+        val c = Calendar.getInstance()
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
-            .setHour(12)
-            .setMinute(0)
+            .setHour(c.get(Calendar.HOUR_OF_DAY))
+            .setMinute(c.get(Calendar.MINUTE))
             .setTitleText("Select Time for SPF")
             .build()
 

@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinDB">
-        <activity android:name=".activities.DestinationActivity"></activity>
+        <activity android:name=".activities.SkinCareTipsActivity"></activity>
+        <activity android:name=".activities.DestinationActivity" />
         <activity android:name=".activities.NotificationMainActivity" />
         <activity
             android:name=".activities.TestList"

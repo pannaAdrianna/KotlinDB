@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@mipmap/bg_launcher_background"
+    android:alpha="0.8"
     android:layout_height="match_parent"
     tools:context=".userInfo.AccountDashboard">
 
@@ -20,6 +22,7 @@
             android:layout_width="150sp"
             android:layout_height="150sp"
             android:layout_marginTop="52dp"
+            android:alpha="1.0"
             android:src="@drawable/ic_person"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,12 +31,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.098" />
 
+
+
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="108dp"
+            android:textColor="@color/white"
             android:text="@string/name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -46,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="@string/example"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:textColor="@color/white"
             android:text="Email"
             app:layout_constraintStart_toStartOf="@+id/name_txt"
             app:layout_constraintTop_toBottomOf="@+id/name_txt" />
@@ -68,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Example"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -109,6 +116,7 @@
             android:layout_width="139dp"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
+            android:alpha="1.0"
             android:onClick="onBtnSignOutClick"
             android:text="@string/sign_out"
             app:layout_constraintBottom_toTopOf="@+id/name"
@@ -122,7 +130,7 @@
             android:layout_width="98dp"
             android:layout_height="22dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="112dp"
+            android:layout_marginTop="120dp"
             android:text="SPF Reminder"
             app:layout_constraintEnd_toStartOf="@+id/btnAlarm"
             app:layout_constraintHorizontal_bias="0.0"

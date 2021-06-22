@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bg_launcher_background"
     android:gravity="center_horizontal"
     tools:context=".activities.AnalyzeActivity">
 
@@ -55,13 +56,31 @@
 
 
             </androidx.cardview.widget.CardView>
-
-            <Switch
-                android:id="@+id/preggoSwitch"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="20sp"
-                android:text="Personalized mode"
-                android:textSize="15sp"></Switch>
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_margin="5sp"
+                android:alpha="0.9"
+                android:padding="10sp">
+                <Switch
+                    android:id="@+id/preggoSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:text="Personalized mode"
+                    android:textSize="15sp"></Switch>
+
+                <Switch
+                    android:id="@+id/personalizedSwitch"
+                    android:layout_below="@+id/preggoSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20sp"
+                    android:text="Preggnant Mode"
+                    android:textSize="15sp"></Switch>
+
+            </RelativeLayout>
+
+
 
             <Button
                 android:id="@+id/btnAnalyze"

@@ -41,5 +41,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun onBtnTipsClick(view: View) {
+
+        val intent = Intent(this, SkinCareTipsActivity::class.java)
+        this.startActivity(intent)
+    }
+
 
 }

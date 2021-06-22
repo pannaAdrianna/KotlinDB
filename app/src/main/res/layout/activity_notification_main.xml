@@ -4,52 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/bg_launcher_background"
     tools:context=".activities.NotificationMainActivity">
 
-    <TextView
-        android:id="@+id/selectedTime"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="11:00"
-        android:textColor="@color/black"
-        android:textSize="45sp"
-        android:typeface="normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnSetTimer"
-        android:layout_width="139dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="32dp"
-        android:text="Set Timer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSelectTimer" />
-
-    <Button
-        android:id="@+id/btnSelectTimer"
-        android:layout_width="139dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:text="Select Timer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedTime" />
-
-    <Button
-        android:id="@+id/btnCancelTimer"
-        android:layout_width="139dp"
-        android:layout_height="40dp"
-        android:text="Cancel Timer"
+        android:background="@color/white"
+        android:alpha="0.9"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSetTimer"
-        app:layout_constraintVertical_bias="0.124" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="SPF Reminder"
+            android:textColor="@color/icons"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/selectedTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/selectedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="11:00"
+            android:textColor="@color/black"
+            android:textSize="45sp"
+            android:typeface="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10sp"
+        android:alpha="0.9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnSetTimer"
+            android:layout_width="139dp"
+            android:layout_height="40dp"
+            android:text="Set Timer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSelectTimer" />
+
+        <Button
+            android:id="@+id/btnSelectTimer"
+            android:layout_width="139dp"
+            android:layout_height="40dp"
+            android:text="Select Timer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnCancelTimer"
+            android:layout_width="139dp"
+            android:layout_height="40dp"
+            android:text="Cancel Timer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSetTimer"
+            app:layout_constraintVertical_bias="0.124" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
