@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -14,16 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinDB">
+        <activity android:name=".activities.DestinationActivity"></activity>
+        <activity android:name=".activities.NotificationMainActivity" />
         <activity
             android:name=".activities.TestList"
             android:label="@string/title_activity_test_list"
-            android:theme="@style/Theme.KotlinDB.NoActionBar"></activity>
+            android:theme="@style/Theme.KotlinDB.NoActionBar" />
         <activity android:name=".activities.OCRActivity" />
         <activity android:name=".activities.AnalyzeActivity" />
         <activity android:name=".activities.PersonalizedList" />
         <activity android:name=".userInfo.SignUpActivity" />
         <activity android:name=".userInfo.AccountDashboard" />
-        <activity android:name=".activities.ListActivity" /> <!-- <activity android:name=".MainActivity"></activity> -->
         <activity android:name=".activities.MainActivity" /> <!-- <activity android:name=".SignInActivity" /> -->
         <activity
             android:name=".userInfo.SignInActivity"
@@ -37,6 +39,8 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Theme.AppCompat" />
+
+        <receiver android:name=".AlarmReceiver" />
     </application>
 
 </manifest>

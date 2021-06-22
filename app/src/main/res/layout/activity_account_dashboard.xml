@@ -82,14 +82,27 @@
             android:id="@+id/btnPersonalize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onBtnPersonalizeClick"
             android:text="Personalize Ingredients"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
-            android:onClick="onBtnPersonalizeClick"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_txt"
-            app:layout_constraintVertical_bias="0.668" />
+            app:layout_constraintVertical_bias="0.261" />
+
+
+        <Button
+            android:id="@+id/btnAlarm"
+            android:layout_width="139dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:onClick="setAlarm"
+            android:text="Set SPF Reminder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.683"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnPersonalize" />
 
         <Button
             android:id="@+id/btnSignOut"
@@ -102,7 +115,19 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_image"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias=".0" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="98dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="112dp"
+            android:text="SPF Reminder"
+            app:layout_constraintEnd_toStartOf="@+id/btnAlarm"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/email_txt"
+            app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

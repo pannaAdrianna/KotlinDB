@@ -9,8 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.database.EmpModelClass
 import edu.ib.kotlindb.R
-import edu.ib.kotlindb.activities.ListActivity
-import edu.ib.kotlindb.activities.PersonalizedList
 import edu.ib.kotlindb.activities.TestList
 
 class BasicAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :

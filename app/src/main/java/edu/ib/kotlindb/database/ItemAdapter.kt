@@ -1,3 +1,4 @@
+import android.app.ListActivity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.database.EmpModelClass
-import edu.ib.kotlindb.activities.ListActivity
 import edu.ib.kotlindb.activities.PersonalizedList
 import edu.ib.kotlindb.R
 
@@ -61,11 +61,6 @@ class ItemAdapter(val context: Context, val items: ArrayList<EmpModelClass>) :
         }
 
         holder.ivDelete.setOnClickListener { view ->
-
-            if (context is ListActivity) {
-                context.deleteRecordAlertDialog(item)
-            }
-
             if (context is PersonalizedList) {
                 context.deleteRecordAlertDialog(item)
             }

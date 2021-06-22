@@ -1,5 +1,6 @@
 package edu.ib.kotlindb.userInfo
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,15 +11,24 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import edu.ib.kotlindb.activities.PersonalizedList
 import edu.ib.kotlindb.R
+import edu.ib.kotlindb.activities.NotificationMainActivity
+import java.util.*
 
 class AccountDashboard : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_dashboard)
         auth = FirebaseAuth.getInstance()
+
+
+
         var user = auth.currentUser
 
         if (user == null) {
@@ -52,6 +62,9 @@ class AccountDashboard : AppCompatActivity() {
 
         }
 
+
+
+
     }
 
     override fun onStart() {
@@ -75,6 +88,14 @@ class AccountDashboard : AppCompatActivity() {
         this.startActivity(intent)
 
     }
+
+    fun setAlarm(view: View) {
+
+        val intent = Intent(this, NotificationMainActivity::class.java)
+        this.startActivity(intent)
+    }
+
+
 
 
 }
