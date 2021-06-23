@@ -43,6 +43,7 @@ class TestList : AppCompatActivity() {
 
 
 
+
     }
 
     /**
@@ -57,13 +58,22 @@ class TestList : AppCompatActivity() {
         return empList
     }
 
+    /**
+     * Function is used to get the Items List from the database table.
+     */
+    private fun getPreggoItemsList(): ArrayList<EmpModelClass> {
+        //creating the instance of DatabaseHandler class
+        databaseHandler = DatabaseHandler(this)
+        //calling the viewEmployee method of DatabaseHandler class to read the records
+        empList = databaseHandler.viewPreggoIngredient()
+
+        return empList
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
-
-
-
 
         return true
     }
@@ -89,6 +99,10 @@ class TestList : AppCompatActivity() {
         if (getBasicItemsList().size == 0) {
             readFromCSV()
         }
+        if (getPreggoItemsList().size == 0) {
+            readFromCSV2()
+        }
+
 
         rvItemsList.visibility = View.VISIBLE
         tvNoRecordsAvailable.visibility = View.GONE
@@ -104,7 +118,6 @@ class TestList : AppCompatActivity() {
 
     fun readFromCSV() {
 
-
         val minput = InputStreamReader(assets.open("data.csv"))
         val reader = BufferedReader(minput)
 
@@ -117,6 +130,32 @@ class TestList : AppCompatActivity() {
             val row: List<String> = line.split(';')
             displayData = displayData + row[0] + "\t" + row[1] + "\n"
             databaseHandler.addEmployee(
+                EmpModelClass(
+                    i + 1,
+                    row[0],
+                    row[1]
+                )
+            )
+        }
+
+
+    }
+
+    fun readFromCSV2() {
+
+
+        val minput = InputStreamReader(assets.open("preggo.csv"))
+        val reader = BufferedReader(minput)
+
+        var line: String
+        var displayData: String = ""
+
+        var i: Int = 0
+        while (reader.readLine().also { line = it } != null) {
+            i += 1
+            val row: List<String> = line.split(';')
+            displayData = displayData + row[0] + "\t" + row[1] + "\n"
+            databaseHandler.addPreggoIngredient(
                 EmpModelClass(
                     i + 1,
                     row[0],

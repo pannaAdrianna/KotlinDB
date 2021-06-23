@@ -16,6 +16,7 @@ class DatabaseHandler(context: Context) :
 
         private val TABLE_CONTACTS = "EmployeeTable"
         private val TABLE_PREGGO = "PreggoTable"
+        private val TABLE = "PregTable"
 
         private val KEY_ID = "_id"
         private val KEY_NAME = "name"
@@ -33,6 +34,11 @@ class DatabaseHandler(context: Context) :
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT" + ")")
         db?.execSQL(CREATE_PREGGO_TABLE)
+
+        val CREATE_PREGGO2_TABLE = ("CREATE TABLE " + TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
+                + KEY_EMAIL + " TEXT" + ")")
+        db?.execSQL(CREATE_PREGGO2_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -40,6 +46,9 @@ class DatabaseHandler(context: Context) :
         onCreate(db)
 
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_PREGGO")
+        onCreate(db)
+
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE")
         onCreate(db)
     }
 
@@ -79,6 +88,21 @@ class DatabaseHandler(context: Context) :
         return success
     }
 
+    fun addPreggoIngredient(emp: EmpModelClass): Long {
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(KEY_NAME, emp.label) // EmpModelClass Name
+        contentValues.put(KEY_EMAIL, emp.description) // EmpModelClass Email
+
+        // Inserting employee details using insert query.
+        val success = db.insert(TABLE, null, contentValues)
+        //2nd argument is String containing nullColumnHack
+
+        db.close() // Closing database connection
+        return success
+    }
+
 
     //Method to read the records from database in form of ArrayList
     fun viewEmployee(): ArrayList<EmpModelClass> {
@@ -87,6 +111,47 @@ class DatabaseHandler(context: Context) :
 
         // Query to select all the records from the table.
         val selectQuery = "SELECT  * FROM $TABLE_CONTACTS"
+
+        val db = this.readableDatabase
+        // Cursor is used to read the record one by one. Add them to data model class.
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var id: Int
+        var name: String
+        var email: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                email = cursor.getString(cursor.getColumnIndex(KEY_EMAIL))
+
+                val emp = EmpModelClass(
+                    id = id,
+                    label = name,
+                    description = email
+                )
+                empList.add(emp)
+
+            } while (cursor.moveToNext())
+        }
+        return empList
+    }
+
+    fun viewPreggoIngredient(): ArrayList<EmpModelClass> {
+
+        val empList: ArrayList<EmpModelClass> = ArrayList<EmpModelClass>()
+
+        // Query to select all the records from the table.
+        val selectQuery = "SELECT * FROM $TABLE"
 
         val db = this.readableDatabase
         // Cursor is used to read the record one by one. Add them to data model class.
@@ -180,6 +245,24 @@ class DatabaseHandler(context: Context) :
         return success
     }
 
+
+    /**
+     * Function to delete record
+     */
+    fun deletePreggoIngredient(emp: EmpModelClass): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, emp.id) // EmpModelClass id
+        // Deleting Row
+        val success = db.delete(TABLE, KEY_ID + "=" + emp.id, null)
+        //2nd argument is String containing nullColumnHack
+
+        // Closing database connection
+        db.close()
+        return success
+    }
+
+
     /**
      * Function to delete record
      */
@@ -195,6 +278,8 @@ class DatabaseHandler(context: Context) :
         db.close()
         return success
     }
+
+
 
 
 

@@ -12,12 +12,11 @@ import edu.ib.kotlindb.database.EmpModelClass
 
 class AnalyzeActivity : AppCompatActivity() {
 
-    lateinit var etIngredients: EditText
-    lateinit var tvResult: TextView
-    lateinit var preggoSwitch: Switch
+
     internal lateinit var databaseHandler: DatabaseHandler
     internal lateinit var empList: ArrayList<EmpModelClass>
     internal lateinit var personalized: ArrayList<EmpModelClass>
+    internal lateinit var preggoList: ArrayList<EmpModelClass>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +26,14 @@ class AnalyzeActivity : AppCompatActivity() {
         var etIngredients: EditText = findViewById(R.id.etINCIstr)
         var tvResult: TextView = findViewById(R.id.tvControversialngriedients)
         var switcher: Switch = findViewById(R.id.preggoSwitch)
+        var switcherPreggo: Switch = findViewById(R.id.personalizedSwitch)
         val btnAnalyze = findViewById<Button>(R.id.btnAnalyze)
         val results: MutableList<String> = ArrayList()
 
         databaseHandler = DatabaseHandler(this)
         empList = databaseHandler.viewEmployee()
         personalized = databaseHandler.viewIngredient()
+        preggoList = databaseHandler.viewPreggoIngredient()
 
         etIngredients.text.clear()
         results.clear()
@@ -74,6 +75,18 @@ class AnalyzeActivity : AppCompatActivity() {
                             }
 
                         }
+                        if(switcherPreggo.isChecked()){
+                            for (pregooIng in preggoList) {
+                                var labelPer = pregooIng.label.trim()
+                                if (ingToCheck.replace(" ", "").equals(labelPer, ignoreCase = true) and (labelPer !in results)
+                                ) {
+                                    results.add(labelPer)
+
+                                }
+                            }
+
+                        }
+
                     }
                 }
 
