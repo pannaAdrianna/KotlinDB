@@ -34,7 +34,7 @@ class TestList : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_list)
 //        setSupportActionBar(findViewById(R.id.toolbar))
-        getSupportActionBar()?.setTitle("Basic Dangerous Ingredients")
+        getSupportActionBar()?.setTitle("Notes")
         rvItemsList =  findViewById(R.id.rvItemsBasicList)
         searchView = findViewById(R.id.search_bar)
         setupListofDataIntoRecyclerView()

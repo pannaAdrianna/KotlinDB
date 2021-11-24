@@ -5,22 +5,35 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import edu.ib.kotlindb.database.EmpModelClass
+import edu.ib.kotlindb.models.TextNote
 
+/**
+ *
+ * - companion object
+ * - null check
+ */
 //creating the database logic, extending the SQLiteOpenHelper base class
 class DatabaseHandler(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
+//    companion object
     companion object {
         private val DATABASE_VERSION = 1
-        private val DATABASE_NAME = "EmployeeDatabase"
+        private val DATABASE_NAME = "NotesDatabase"
 
         private val TABLE_CONTACTS = "EmployeeTable"
         private val TABLE_PREGGO = "PreggoTable"
         private val TABLE = "PregTable"
+        private val TABLE_TEXT_NOTES = "TextNotesTable"
 
         private val KEY_ID = "_id"
+
         private val KEY_NAME = "name"
         private val KEY_EMAIL = "email"
+        private val KEY_TITLE = "title"
+        private val KEY_DESC= "desc"
+
+
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -39,6 +52,12 @@ class DatabaseHandler(context: Context) :
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT" + ")")
         db?.execSQL(CREATE_PREGGO2_TABLE)
+
+
+        val CREATE_TEXTNOTES_TABLE = ("CREATE TABLE " + TABLE_TEXT_NOTES + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
+                + KEY_DESC + " TEXT" + ")")
+        db?.execSQL(CREATE_TEXTNOTES_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -49,6 +68,9 @@ class DatabaseHandler(context: Context) :
         onCreate(db)
 
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE")
+        onCreate(db)
+
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_TEXT_NOTES")
         onCreate(db)
     }
 
@@ -97,6 +119,23 @@ class DatabaseHandler(context: Context) :
 
         // Inserting employee details using insert query.
         val success = db.insert(TABLE, null, contentValues)
+        //2nd argument is String containing nullColumnHack
+
+        db.close() // Closing database connection
+        return success
+    }
+
+
+
+    fun addTextNote(emp: TextNote): Long {
+        val db = this.writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(KEY_TITLE, emp.title) // EmpModelClass Name
+        contentValues.put(KEY_DESC, emp.desc) // EmpModelClass Email
+
+        // Inserting employee details using insert query.
+        val success = db.insert(TABLE_TEXT_NOTES, null, contentValues)
         //2nd argument is String containing nullColumnHack
 
         db.close() // Closing database connection
@@ -229,6 +268,51 @@ class DatabaseHandler(context: Context) :
         return empList
     }
 
+
+
+    //Method to read the records from database in form of ArrayList
+    fun viewTextNote(): ArrayList<TextNote> {
+
+        val empList: ArrayList<TextNote> = ArrayList<TextNote>()
+
+        // Query to select all the records from the table.
+        val selectQuery = "SELECT  * FROM $TABLE_TEXT_NOTES"
+
+        val db = this.readableDatabase
+        // Cursor is used to read the record one by one. Add them to data model class.
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var id: Int
+        var title: String
+        var desc: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
+                desc = cursor.getString(cursor.getColumnIndex(KEY_DESC))
+
+                val emp = TextNote(
+                    id = id,
+                    title = title,
+                    desc = desc
+                )
+                empList.add(emp)
+
+            } while (cursor.moveToNext())
+        }
+        return empList
+    }
+
+
     /**
      * Function to delete record
      */
@@ -249,18 +333,20 @@ class DatabaseHandler(context: Context) :
     /**
      * Function to delete record
      */
-    fun deletePreggoIngredient(emp: EmpModelClass): Int {
+    fun deleteTextNote(emp: TextNote): Int {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(KEY_ID, emp.id) // EmpModelClass id
         // Deleting Row
-        val success = db.delete(TABLE, KEY_ID + "=" + emp.id, null)
+        val success = db.delete(TABLE_TEXT_NOTES, KEY_ID + "=" + emp.id, null)
         //2nd argument is String containing nullColumnHack
 
         // Closing database connection
         db.close()
         return success
     }
+
+
 
 
     /**

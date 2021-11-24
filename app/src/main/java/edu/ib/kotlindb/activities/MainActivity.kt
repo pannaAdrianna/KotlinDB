@@ -11,13 +11,18 @@ import edu.ib.kotlindb.userInfo.AccountDashboard
 class MainActivity : AppCompatActivity() {
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         getSupportActionBar()?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+    }
+
+    // do testów aktywności
+    fun onBtnTestClick(view: android.view.View) {
+
+        val intent = Intent(this, TextNotesActivity::class.java)
+        this.startActivity(intent)
     }
 
     fun onBtnSearchIngredient(view: View) {
@@ -26,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
     fun onBtnAnalyzeClick(view: View) {
         val intent = Intent(this, AnalyzeActivity::class.java)
         this.startActivity(intent)
@@ -35,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, OCRActivity::class.java)
         this.startActivity(intent)
     }
+
     fun onBtnAccountClick(view: View) {
         val intent = Intent(this, AccountDashboard::class.java)
         this.startActivity(intent)
@@ -43,6 +50,12 @@ class MainActivity : AppCompatActivity() {
 
     fun onBtnTipsClick(view: View) {
 
+        val intent = Intent(this, SkinCareTipsActivity::class.java)
+        this.startActivity(intent)
+    }
+
+
+    fun onBtnTextNoteActivityClick(view: android.view.View) {
         val intent = Intent(this, SkinCareTipsActivity::class.java)
         this.startActivity(intent)
     }
