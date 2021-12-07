@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -14,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.ib.kotlindb.R
-import edu.ib.kotlindb.database.EmpModelClass
 import edu.ib.kotlindb.database.TextNotesAdapter
 import edu.ib.kotlindb.models.TextNote
 import kotlinx.android.synthetic.main.dialog_add_new_text_note.*
@@ -27,6 +27,7 @@ class TextNotesActivity : AppCompatActivity() {
 
     internal lateinit var rvItemsList: RecyclerView
     internal lateinit var btnAdd: FloatingActionButton
+    internal lateinit var btnChoose: FloatingActionButton
 
     val TAG: String = "TextNotesActivity: "
 
@@ -40,11 +41,12 @@ class TextNotesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_text_notes)
-        supportActionBar?.setTitle("Notes")
+        supportActionBar?.title = "Text Notes"
 
         // to z content
         rvItemsList = findViewById(R.id.rvTextNotes)
         btnAdd = findViewById(R.id.btnAddNewNote)
+        btnChoose = findViewById(R.id.btnChoose)
         searchView = findViewById(R.id.search_bar)
         setupListofDataIntoRecyclerView()
         adapter = TextNotesAdapter(this, getBasicItemsList())
@@ -52,34 +54,18 @@ class TextNotesActivity : AppCompatActivity() {
 
 
         btnAdd.setOnClickListener { view ->
-            /*  Toast.makeText(
-                  applicationContext,
-                  TAG + " btn Add click",
-                  Toast.LENGTH_LONG
-              ).show()*/
 
-
-//            openDialog()
-            showDialog()
+            addNewTextNoteAlertDialog()
             setupListofDataIntoRecyclerView()
-//            TODO("alert dialog")
+        }
+        btnChoose.setOnClickListener {
+
+            Toast.makeText(this,"TA click on text",Toast.LENGTH_SHORT).show()
+            chooseNoteType()
         }
 
     }
 
-   /* fun openDialog() {
-        val dialog = AddNewNoteDialog()
-        dialog.show(supportFragmentManager, "Add New Note Dialog")
-
-        println("\n\n\n note from dialog ${note}")
-        if (note.title != "") {
-            databaseHandler.addTextNote(note)
-            setupListofDataIntoRecyclerView()
-            dialog.dismiss()
-        }
-
-
-    }*/
 
 
     private fun getBasicItemsList(): ArrayList<TextNote> {
@@ -124,17 +110,17 @@ class TextNotesActivity : AppCompatActivity() {
     }
 
 
-    private fun showDialog() {
+    private fun addNewTextNoteAlertDialog() {
         val customDialog = Dialog(this)
         customDialog.setContentView(R.layout.dialog_add_new_text_note)
 
-        customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val yesBtn = customDialog.findViewById(R.id.btn_add) as TextView
+        customDialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner);
+        val addBtn = customDialog.findViewById(R.id.btn_add) as TextView
 //        val noBtn = customDialog.findViewById(R.id.no_opt) as TextView
         databaseHandler = DatabaseHandler(this)
         customDialog!!.setCanceledOnTouchOutside(true);
 
-        yesBtn.setOnClickListener {
+        addBtn.setOnClickListener {
             //Do something here
             val title = customDialog.et_title.text.toString()
             val desc = customDialog.et_desc.text.toString()
@@ -146,10 +132,44 @@ class TextNotesActivity : AppCompatActivity() {
 
             customDialog.dismiss()
         }
-//        noBtn.setOnClickListener {
-//            customDialog.dismiss()
-//        }
         customDialog.show()
+
+
+    }
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.radio_text_note ->
+                    if (checked) {
+                        Toast.makeText(view.context,"Dialog Radio: text",Toast.LENGTH_LONG).show()
+                        addNewTextNoteAlertDialog()
+                    }
+                R.id.radio_photo ->
+                    if (checked) {
+                        // Ninjas rule
+                        Toast.makeText(view.context,"Dialog Radio: photo",Toast.LENGTH_LONG).show()
+                    }
+            }
+        }
+    }
+
+    private fun chooseNoteType() {
+        val customDialog = Dialog(this)
+        customDialog.setContentView(R.layout.dialog_choose_new_note_type)
+
+        customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        customDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner);
+        customDialog!!.setCanceledOnTouchOutside(true);
+
+        customDialog.show()
+
+
+
     }
 
 

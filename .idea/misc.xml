@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-mdpi/round_corner.xml" value="0.4197916666666667" />
+        <entry key="app/src/main/res/drawable/round_corner.xml" value="0.1875" />
+        <entry key="app/src/main/res/layout-v23/dialog_choose_note_type.xml" value="0.3255208333333333" />
         <entry key="app/src/main/res/layout-v23/items_row.xml" value="0.26979166666666665" />
+        <entry key="app/src/main/res/layout/activity_account_dashboard.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_test_list.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/activity_text_notes.xml" value="0.2557291666666667" />
@@ -11,10 +15,16 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.21603260869565216" />
         <entry key="app/src/main/res/layout/content_notes_list.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/content_test_list.xml" value="0.26979166666666665" />
+        <entry key="app/src/main/res/layout/dialog_add_new_text_note.xml" value="0.17135416666666667" />
+        <entry key="app/src/main/res/layout/dialog_choose_new_note_type.xml" value="0.3255208333333333" />
         <entry key="app/src/main/res/layout/dialog_update.xml" value="0.26979166666666665" />
+        <entry key="app/src/main/res/layout/fragment_item.xml" value="0.328125" />
+        <entry key="app/src/main/res/layout/fragment_item_list.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/items_row.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/items_test_list_row.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/items_text_notes_row.xml" value="0.26979166666666665" />
+        <entry key="app/src/main/res/layout/main_activity.xml" value="0.17135416666666667" />
+        <entry key="app/src/main/res/layout/main_fragment.xml" value="0.17135416666666667" />
       </map>
     </option>
   </component>
