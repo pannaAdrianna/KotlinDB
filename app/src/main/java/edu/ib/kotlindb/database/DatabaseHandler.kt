@@ -4,7 +4,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import android.graphics.BitmapFactory
 import edu.ib.kotlindb.database.EmpModelClass
+import edu.ib.kotlindb.models.PhotoNote
 import edu.ib.kotlindb.models.TextNote
 
 /**
@@ -16,7 +18,7 @@ import edu.ib.kotlindb.models.TextNote
 class DatabaseHandler(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-//    companion object
+    //    companion object
     companion object {
         private val DATABASE_VERSION = 1
         private val DATABASE_NAME = "NotesDatabase"
@@ -25,13 +27,15 @@ class DatabaseHandler(context: Context) :
         private val TABLE_PREGGO = "PreggoTable"
         private val TABLE = "PregTable"
         private val TABLE_TEXT_NOTES = "TextNotesTable"
+        private val TABLE_PHOTO_NOTES = "PhotoNotesTable"
 
         private val KEY_ID = "_id"
 
         private val KEY_NAME = "name"
         private val KEY_EMAIL = "email"
         private val KEY_TITLE = "title"
-        private val KEY_DESC= "desc"
+        private val KEY_DESC = "desc"
+        private val KEY_IMAGE = "image"
 
 
     }
@@ -58,6 +62,11 @@ class DatabaseHandler(context: Context) :
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
                 + KEY_DESC + " TEXT" + ")")
         db?.execSQL(CREATE_TEXTNOTES_TABLE)
+
+        val CREATE_PHOTONOTES_TABLE = ("CREATE TABLE " + TABLE_PHOTO_NOTES + "("
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
+                + KEY_IMAGE + " BLOB" + ")")
+        db?.execSQL(CREATE_PHOTONOTES_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -72,7 +81,72 @@ class DatabaseHandler(context: Context) :
 
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_TEXT_NOTES")
         onCreate(db)
+        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_PHOTO_NOTES")
+        onCreate(db)
     }
+
+
+    fun addPhotoNote(name: String?, image: ByteArray) {
+        try {
+            val db = this.writableDatabase
+            val cv = ContentValues()
+            cv.put(KEY_NAME, name)
+            cv.put(KEY_IMAGE, image)
+            db.insert(TABLE_PHOTO_NOTES, null, cv)
+        } catch (e: SQLiteException) {
+            println(e)
+        }
+
+    }
+
+    fun getImages(): ArrayList<PhotoNote> {
+        val images: ArrayList<PhotoNote> = ArrayList<PhotoNote>()
+
+        // Query to select all the records from the table.
+        val selectQuery = "SELECT  * FROM $TABLE_PHOTO_NOTES"
+
+        val db = this.readableDatabase
+        // Cursor is used to read the record one by one. Add them to data model class.
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var id: Int
+        var title: String
+        var image: ByteArray
+        var description: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                title = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                var imgByte = cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE))
+                BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
+
+                val emp = PhotoNote(
+                    id = id,
+                    title = title,
+                    desc = "desc",
+                    image = imgByte
+                )
+                images.add(emp)
+
+            } while (cursor.moveToNext())
+        }
+
+        println("\n\n\nIMAGES\n\n\n")
+        println(images)
+        return images
+
+
+    }
+
 
     /**
      * Function to insert data
@@ -124,7 +198,6 @@ class DatabaseHandler(context: Context) :
         db.close() // Closing database connection
         return success
     }
-
 
 
     fun addTextNote(emp: TextNote): Long {
@@ -269,7 +342,6 @@ class DatabaseHandler(context: Context) :
     }
 
 
-
     //Method to read the records from database in form of ArrayList
     fun viewTextNote(): ArrayList<TextNote> {
 
@@ -347,8 +419,6 @@ class DatabaseHandler(context: Context) :
     }
 
 
-
-
     /**
      * Function to delete record
      */
@@ -364,9 +434,6 @@ class DatabaseHandler(context: Context) :
         db.close()
         return success
     }
-
-
-
 
 
     fun getAllIngredients(): java.util.ArrayList<HashMap<String, String>> {

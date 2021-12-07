@@ -7,6 +7,7 @@ import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +25,9 @@ import com.google.android.gms.vision.text.TextRecognizer
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import edu.ib.kotlindb.R
+import android.graphics.Bitmap.CompressFormat
+import java.io.ByteArrayOutputStream
+
 
 class PhotoNoteActivity : AppCompatActivity() {
 
@@ -33,10 +37,10 @@ class PhotoNoteActivity : AppCompatActivity() {
     companion object {
         var mResultEt: EditText? = null
         var mPreviewIv: ImageView? = null
-        var image: ImageView? = null
+        lateinit var image: ImageView
         var btnAddPhoto: LinearLayout? = null
         var imagePreview: LinearLayout? = null
-        var btnAdd: Button?=null
+        var btnAdd: Button? = null
 
         var MESSAGE = "MESSAGE" //used as id to another activity
         private const val CAMERA_REQUEST_CODE = 200
@@ -63,7 +67,7 @@ class PhotoNoteActivity : AppCompatActivity() {
         btnAddPhoto = findViewById(R.id.ll_add_image)
         imagePreview = findViewById(R.id.ll_image)
 
-        btnAdd=findViewById(R.id.btnAddNewPhotoNote)
+        btnAdd = findViewById(R.id.btnAddNewPhotoNote)
 
 
         val actionBar = supportActionBar
@@ -81,9 +85,6 @@ class PhotoNoteActivity : AppCompatActivity() {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
-
-
-
 
 
     }
@@ -161,7 +162,11 @@ class PhotoNoteActivity : AppCompatActivity() {
      * method asks for permission to storage
      */
     private fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, storagePermission, PhotoNoteActivity.STORAGE_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            this,
+            storagePermission,
+            PhotoNoteActivity.STORAGE_REQUEST_CODE
+        )
     }
 
     /**
@@ -194,7 +199,11 @@ class PhotoNoteActivity : AppCompatActivity() {
      */
     private fun requestCameraPermission() {
         // can run the camera and save to gallery
-        ActivityCompat.requestPermissions(this, cameraPermission, PhotoNoteActivity.CAMERA_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            this,
+            cameraPermission,
+            PhotoNoteActivity.CAMERA_REQUEST_CODE
+        )
     }
 
     /**
@@ -301,19 +310,33 @@ class PhotoNoteActivity : AppCompatActivity() {
 
     fun onAddPhotoToNoteClick(view: android.view.View) {
 
-        Toast.makeText(this,"Add photo click",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Add photo click", Toast.LENGTH_SHORT).show()
         showImageImportDialog()
-        if(image!=null){
-            imagePreview?.visibility  =View.VISIBLE
-            btnAddPhoto?.visibility  =View.GONE
-            btnAdd?.visibility=View.VISIBLE
+        if (image != null) {
+            imagePreview?.visibility = View.VISIBLE
+            btnAddPhoto?.visibility = View.GONE
+            btnAdd?.visibility = View.VISIBLE
         }
 
     }
 
     fun onBtnAddNePhotoNoteClick(view: android.view.View) {
-        Toast.makeText(this,"Add new photo note",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Add new photo note", Toast.LENGTH_SHORT).show()
 
+
+        val array : ByteArray = imageToBitmap(image)
+        databaseHandler = DatabaseHandler(this)
+        databaseHandler.addPhotoNote("test",array)
+
+
+    }
+
+    private fun imageToBitmap(image: ImageView): ByteArray {
+        val bitmap = (image.drawable as BitmapDrawable).bitmap
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+
+        return stream.toByteArray()
     }
 
 }
