@@ -1,5 +1,6 @@
 package edu.ib.kotlindb.activities
 
+import DatabaseHandler
 import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
@@ -14,9 +15,7 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -28,11 +27,17 @@ import edu.ib.kotlindb.R
 
 class PhotoNoteActivity : AppCompatActivity() {
 
+    internal lateinit var databaseHandler: DatabaseHandler
 
 
     companion object {
         var mResultEt: EditText? = null
         var mPreviewIv: ImageView? = null
+        var image: ImageView? = null
+        var btnAddPhoto: LinearLayout? = null
+        var imagePreview: LinearLayout? = null
+        var btnAdd: Button?=null
+
         var MESSAGE = "MESSAGE" //used as id to another activity
         private const val CAMERA_REQUEST_CODE = 200
         private const val STORAGE_REQUEST_CODE = 400
@@ -54,12 +59,18 @@ class PhotoNoteActivity : AppCompatActivity() {
 
         mResultEt = findViewById(R.id.resultEt)
         mPreviewIv = findViewById(R.id.ivImage)
+        image = findViewById(R.id.ivImageNote)
+        btnAddPhoto = findViewById(R.id.ll_add_image)
+        imagePreview = findViewById(R.id.ll_image)
+
+        btnAdd=findViewById(R.id.btnAddNewPhotoNote)
+
 
         val actionBar = supportActionBar
         actionBar!!.subtitle = "Click + button to insert Image"
 
-        //canera permission
-        //canera permission
+
+        //camera permission
         cameraPermission = arrayOf(
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -70,12 +81,17 @@ class PhotoNoteActivity : AppCompatActivity() {
             Manifest.permission.CAMERA,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
+
+
+
+
+
     }
 
     fun onBtnAnalyzeClick(view: View) {
-        val intent = Intent(this, AnalyzeActivity::class.java)
-        intent.putExtra(PhotoNoteActivity.MESSAGE, mResultEt?.text.toString())
-        startActivity(intent)
+//        val intent = Intent(this, AnalyzeActivity::class.java)
+//        intent.putExtra(PhotoNoteActivity.MESSAGE, mResultEt?.text.toString())
+//        startActivity(intent)
 
     }
 
@@ -252,6 +268,7 @@ class PhotoNoteActivity : AppCompatActivity() {
 
                 // setting image to ImV
                 mPreviewIv!!.setImageURI(resultUri)
+                image!!.setImageURI(resultUri)
 
                 // drawable bitmap for text recogni
                 val bitmapDrawable = mPreviewIv!!.drawable as BitmapDrawable
@@ -272,7 +289,7 @@ class PhotoNoteActivity : AppCompatActivity() {
                         sb.append("\n")
                     }
                     //set text to edit text
-                    mResultEt!!.setText(sb.toString())
+//                    mResultEt!!.setText(sb.toString())
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 //secure if there is any error. Show
@@ -280,6 +297,23 @@ class PhotoNoteActivity : AppCompatActivity() {
                 Toast.makeText(this, "" + e, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun onAddPhotoToNoteClick(view: android.view.View) {
+
+        Toast.makeText(this,"Add photo click",Toast.LENGTH_SHORT).show()
+        showImageImportDialog()
+        if(image!=null){
+            imagePreview?.visibility  =View.VISIBLE
+            btnAddPhoto?.visibility  =View.GONE
+            btnAdd?.visibility=View.VISIBLE
+        }
+
+    }
+
+    fun onBtnAddNePhotoNoteClick(view: android.view.View) {
+        Toast.makeText(this,"Add new photo note",Toast.LENGTH_SHORT).show()
+
     }
 
 }
