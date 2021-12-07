@@ -5,6 +5,7 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +17,7 @@ import edu.ib.kotlindb.R
 import edu.ib.kotlindb.database.EmpModelClass
 import edu.ib.kotlindb.database.TextNotesAdapter
 import edu.ib.kotlindb.models.TextNote
+import kotlinx.android.synthetic.main.dialog_add_new_text_note.*
 
 class TextNotesActivity : AppCompatActivity() {
 
@@ -38,7 +40,7 @@ class TextNotesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_text_notes)
-        getSupportActionBar()?.setTitle("Notes")
+        supportActionBar?.setTitle("Notes")
 
         // to z content
         rvItemsList = findViewById(R.id.rvTextNotes)
@@ -46,25 +48,38 @@ class TextNotesActivity : AppCompatActivity() {
         searchView = findViewById(R.id.search_bar)
         setupListofDataIntoRecyclerView()
         adapter = TextNotesAdapter(this, getBasicItemsList())
-        rvItemsList.setAdapter(adapter);
+        rvItemsList.adapter = adapter;
 
 
         btnAdd.setOnClickListener { view ->
-            Toast.makeText(
-                applicationContext,
-                TAG + " btn Add click",
-                Toast.LENGTH_LONG
-            ).show()
+            /*  Toast.makeText(
+                  applicationContext,
+                  TAG + " btn Add click",
+                  Toast.LENGTH_LONG
+              ).show()*/
 
 
-
-            TODO("alert dialog")
+//            openDialog()
+            showDialog()
+            setupListofDataIntoRecyclerView()
+//            TODO("alert dialog")
         }
 
     }
 
+   /* fun openDialog() {
+        val dialog = AddNewNoteDialog()
+        dialog.show(supportFragmentManager, "Add New Note Dialog")
+
+        println("\n\n\n note from dialog ${note}")
+        if (note.title != "") {
+            databaseHandler.addTextNote(note)
+            setupListofDataIntoRecyclerView()
+            dialog.dismiss()
+        }
 
 
+    }*/
 
 
     private fun getBasicItemsList(): ArrayList<TextNote> {
@@ -78,24 +93,22 @@ class TextNotesActivity : AppCompatActivity() {
 
 
     private fun setupListofDataIntoRecyclerView() {
-        rvItemsList = findViewById(R.id.rvTextNotes)
+
         val tvNoRecordsAvailable: TextView = findViewById(R.id.tvNoRecordsAvailable)
-
-
         if (getBasicItemsList().size == 0) {
             rvItemsList.visibility = View.GONE
             tvNoRecordsAvailable.visibility = View.VISIBLE
             addSomeData()
         }
+        refreshAdapter()
+    }
 
-        rvItemsList.visibility = View.VISIBLE
-        tvNoRecordsAvailable.visibility = View.GONE
 
+    private fun refreshAdapter() {
         rvItemsList.layoutManager = LinearLayoutManager(this)
         val itemAdapter = TextNotesAdapter(this, getBasicItemsList())
         rvItemsList.adapter = itemAdapter
-
-
+        itemAdapter.notifyDataSetChanged()
     }
 
     private fun addSomeData() {
@@ -109,6 +122,36 @@ class TextNotesActivity : AppCompatActivity() {
             TextNote(3, "Title Test 3", "DESC test 3")
         )
     }
+
+
+    private fun showDialog() {
+        val customDialog = Dialog(this)
+        customDialog.setContentView(R.layout.dialog_add_new_text_note)
+
+        customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val yesBtn = customDialog.findViewById(R.id.btn_add) as TextView
+//        val noBtn = customDialog.findViewById(R.id.no_opt) as TextView
+        databaseHandler = DatabaseHandler(this)
+        customDialog!!.setCanceledOnTouchOutside(true);
+
+        yesBtn.setOnClickListener {
+            //Do something here
+            val title = customDialog.et_title.text.toString()
+            val desc = customDialog.et_desc.text.toString()
+
+
+            databaseHandler.addTextNote(TextNote(0, title, desc))
+            setupListofDataIntoRecyclerView()
+            Toast.makeText(this,"Added new note ${title}",Toast.LENGTH_SHORT).show()
+
+            customDialog.dismiss()
+        }
+//        noBtn.setOnClickListener {
+//            customDialog.dismiss()
+//        }
+        customDialog.show()
+    }
+
 
     fun deleteRecordAlertDialog(empModelClass: TextNote) {
         val builder = AlertDialog.Builder(this)
@@ -153,8 +196,6 @@ class TextNotesActivity : AppCompatActivity() {
         alertDialog.setCancelable(false) // Will not allow user to cancel after clicking on remaining screen area.
         alertDialog.show()  // show the dialog to UI
     }
-
-    fun onBtnAddNoteClick(view: android.view.View) {}
 
 
 }

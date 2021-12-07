@@ -1,4 +1,5 @@
 package edu.ib.kotlindb.models
 
-class TextNote(id: Int, title: String, val desc: String) : Note(id, title) {
+data class TextNote(override val id: Int, override var title: String?, val desc: String? = null) : Note(id, title) {
+
 }
