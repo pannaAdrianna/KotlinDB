@@ -1,5 +1,6 @@
 package edu.ib.kotlindb.database
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,32 +8,35 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.R
-import edu.ib.kotlindb.activities.TestList
+import edu.ib.kotlindb.activities.AllNotesActivity
 import edu.ib.kotlindb.activities.TextNotesActivity
+import edu.ib.kotlindb.models.Note
 import edu.ib.kotlindb.models.TextNote
 
-class TextNotesAdapter(val context: Context, private val items: ArrayList<TextNote>) :
-    RecyclerView.Adapter<TextNotesAdapter.ViewHolder>() {
+class NoteAdapter(val context: Context, private val items: ArrayList<Note>) :
+    RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     /**
      * A ViewHolder describes an item view and metadata about its place within the RecyclerView.
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // Holds the TextView that will add each item to
-        val layout: LinearLayout = view.findViewById(R.id.linear_rows)
+        val layout: LinearLayout = view.findViewById(R.id.linear_row_item_note)
 
         val tvTitle: TextView = view.findViewById(R.id.tvTitle)
-        val tvDesc: TextView = view.findViewById(R.id.tvDesc)
-        val ivDelete: ImageView = view.findViewById(R.id.ivDelete)
+        var note: CardView = view.findViewById(R.id.item)
+
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteAdapter.ViewHolder {
         return ViewHolder(
             LayoutInflater.from(context).inflate(
-                R.layout.items_text_notes_row,
+                R.layout.rv_row_item_note,
                 parent,
                 false
             )
@@ -40,9 +44,16 @@ class TextNotesAdapter(val context: Context, private val items: ArrayList<TextNo
     }
 
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    /**
+     * Gets the number of items in the list
+     */
+    override fun getItemCount(): Int {
+        return items.size
+    }
 
-        val item = items.get(position)
+    override fun onBindViewHolder(holder: NoteAdapter.ViewHolder, position: Int) {
+
+        val item = items[position]
 
         holder.tvTitle.text = item.title
 
@@ -50,23 +61,16 @@ class TextNotesAdapter(val context: Context, private val items: ArrayList<TextNo
 
         holder.layout.setBackgroundColor(ContextCompat.getColor(context, R.color.colorWhite))
 
-        holder.ivDelete.setOnClickListener { view ->
 
-            if (context is TextNotesActivity) {
+
+
+        holder.note.setOnClickListener {
+            if (context is AllNotesActivity) {
                 context.deleteRecordAlertDialog(item)
             }
 
-
         }
 
-
-    }
-
-    /**
-     * Gets the number of items in the list
-     */
-    override fun getItemCount(): Int {
-        return items.size
     }
 
 

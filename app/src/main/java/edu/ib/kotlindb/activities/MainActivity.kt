@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onBtnSearchIngredient(view: View) {
-        val intent = Intent(this, TestList::class.java)
+//        val intent = Intent(this, TestList::class.java)
+        val intent = Intent(this, AllNotesActivity::class.java)
         this.startActivity(intent)
 
 
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun onBtnTextNoteActivityClick(view: android.view.View) {
-        val intent = Intent(this, SkinCareTipsActivity::class.java)
+        val intent = Intent(this, AllNotesActivity::class.java)
         this.startActivity(intent)
     }
 

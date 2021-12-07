@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.BitmapFactory
 import edu.ib.kotlindb.database.EmpModelClass
+import edu.ib.kotlindb.models.Note
 import edu.ib.kotlindb.models.PhotoNote
 import edu.ib.kotlindb.models.TextNote
 
@@ -20,7 +21,7 @@ class DatabaseHandler(context: Context) :
 
     //    companion object
     companion object {
-        private val DATABASE_VERSION = 1
+        private val DATABASE_VERSION = 2
         private val DATABASE_NAME = "NotesDatabase"
 
         private val TABLE_CONTACTS = "EmployeeTable"
@@ -42,28 +43,28 @@ class DatabaseHandler(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase?) {
         //creating table with fields
-        val CREATE_CONTACTS_TABLE = ("CREATE TABLE " + TABLE_CONTACTS + "("
+        val CREATE_CONTACTS_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_CONTACTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT" + ")")
         db?.execSQL(CREATE_CONTACTS_TABLE)
 
-        val CREATE_PREGGO_TABLE = ("CREATE TABLE " + TABLE_PREGGO + "("
+        val CREATE_PREGGO_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_PREGGO + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT" + ")")
         db?.execSQL(CREATE_PREGGO_TABLE)
 
-        val CREATE_PREGGO2_TABLE = ("CREATE TABLE " + TABLE + "("
+        val CREATE_PREGGO2_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
                 + KEY_EMAIL + " TEXT" + ")")
         db?.execSQL(CREATE_PREGGO2_TABLE)
 
 
-        val CREATE_TEXTNOTES_TABLE = ("CREATE TABLE " + TABLE_TEXT_NOTES + "("
+        val CREATE_TEXTNOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_TEXT_NOTES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
                 + KEY_DESC + " TEXT" + ")")
         db?.execSQL(CREATE_TEXTNOTES_TABLE)
 
-        val CREATE_PHOTONOTES_TABLE = ("CREATE TABLE " + TABLE_PHOTO_NOTES + "("
+        val CREATE_PHOTONOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_PHOTO_NOTES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
                 + KEY_IMAGE + " BLOB" + ")")
         db?.execSQL(CREATE_PHOTONOTES_TABLE)
@@ -86,18 +87,22 @@ class DatabaseHandler(context: Context) :
     }
 
 
-    fun addPhotoNote(name: String?, image: ByteArray) {
-        try {
-            val db = this.writableDatabase
-            val cv = ContentValues()
-            cv.put(KEY_NAME, name)
-            cv.put(KEY_IMAGE, image)
-            db.insert(TABLE_PHOTO_NOTES, null, cv)
-        } catch (e: SQLiteException) {
-            println(e)
-        }
+    fun addPhotoNote(item: PhotoNote): Long {
+
+
+        val db = this.writableDatabase
+
+        val cv = ContentValues()
+        cv.put(KEY_TITLE, item.title)
+        cv.put(KEY_IMAGE, item.image)
+        val success = db.insert(TABLE_PHOTO_NOTES, null, cv)
+        db.close()
+
+        return success
+
 
     }
+
 
     fun getImages(): ArrayList<PhotoNote> {
         val images: ArrayList<PhotoNote> = ArrayList<PhotoNote>()
@@ -213,6 +218,47 @@ class DatabaseHandler(context: Context) :
 
         db.close() // Closing database connection
         return success
+    }
+
+
+    fun viewNotes(): ArrayList<Note> {
+
+        val empList: ArrayList<Note> = ArrayList<Note>()
+
+        // Query to select all the records from the table.
+        val selectQuery = "SELECT  * FROM $TABLE_TEXT_NOTES"
+
+        val db = this.readableDatabase
+        // Cursor is used to read the record one by one. Add them to data model class.
+        var cursor: Cursor? = null
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var id: Int
+        var title: String
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
+
+
+                val note = Note(
+                    id = id,
+                    title = title,
+                )
+                empList.add(note)
+
+            } while (cursor.moveToNext())
+        }
+        return empList
     }
 
 
@@ -417,6 +463,8 @@ class DatabaseHandler(context: Context) :
         db.close()
         return success
     }
+
+
 
 
     /**

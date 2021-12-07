@@ -26,6 +26,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import edu.ib.kotlindb.R
 import android.graphics.Bitmap.CompressFormat
+import edu.ib.kotlindb.models.PhotoNote
 import java.io.ByteArrayOutputStream
 
 
@@ -325,8 +326,9 @@ class PhotoNoteActivity : AppCompatActivity() {
 
 
         val array : ByteArray = imageToBitmap(image)
+        var t = PhotoNote(0,"title from et","desc from et",array)
         databaseHandler = DatabaseHandler(this)
-        databaseHandler.addPhotoNote("test",array)
+        databaseHandler.addPhotoNote(t)
 
 
     }
