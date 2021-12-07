@@ -2,6 +2,7 @@ package edu.ib.kotlindb.activities
 
 import DatabaseHandler
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -153,6 +154,8 @@ class TextNotesActivity : AppCompatActivity() {
                     if (checked) {
                         // Ninjas rule
                         Toast.makeText(view.context,"Dialog Radio: photo",Toast.LENGTH_LONG).show()
+                        val intent = Intent(this, PhotoNoteActivity::class.java)
+                        this.startActivity(intent)
                     }
             }
         }
@@ -164,12 +167,8 @@ class TextNotesActivity : AppCompatActivity() {
 
         customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         customDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner);
-        customDialog!!.setCanceledOnTouchOutside(true);
-
+        customDialog.setCanceledOnTouchOutside(true);
         customDialog.show()
-
-
-
     }
 
 

@@ -9,6 +9,8 @@
         <entry key="app/src/main/res/layout-v23/items_row.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/activity_account_dashboard.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_o_c_r.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/layout/activity_photo_notes.xml" value="0.23489583333333333" />
         <entry key="app/src/main/res/layout/activity_test_list.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/activity_text_notes.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/layout/content_basic_list.xml" value="0.26979166666666665" />
@@ -25,6 +27,8 @@
         <entry key="app/src/main/res/layout/items_text_notes_row.xml" value="0.26979166666666665" />
         <entry key="app/src/main/res/layout/main_activity.xml" value="0.17135416666666667" />
         <entry key="app/src/main/res/layout/main_fragment.xml" value="0.17135416666666667" />
+        <entry key="app/src/main/res/menu/menu_activity_photo_notes.xml" value="0.23489583333333333" />
+        <entry key="app/src/main/res/menu/menu_ocr_main.xml" value="0.23489583333333333" />
       </map>
     </option>
   </component>

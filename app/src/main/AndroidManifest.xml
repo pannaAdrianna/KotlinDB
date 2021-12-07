@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KotlinDB">
-
+        <activity
+            android:name=".activities.PhotoNoteActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.TextNotesActivity"
             android:exported="false" />
@@ -30,18 +32,15 @@
         <activity android:name=".activities.AnalyzeActivity" />
         <activity android:name=".activities.PersonalizedList" />
         <activity android:name=".userInfo.SignUpActivity" />
-        <activity android:name=".userInfo.AccountDashboard" />
-<!--        <activity android:name=".activities.MainActivity" /> &lt;!&ndash; <activity android:name=".SignInActivity" /> &ndash;&gt;-->
-<!--        <activity-->
-<!--            android:name=".userInfo.SignInActivity"-->
-<!--            android:label="@string/app_name">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-
+        <activity android:name=".userInfo.AccountDashboard" /> <!-- <activity android:name=".activities.MainActivity" /> &lt;!&ndash; <activity android:name=".SignInActivity" /> &ndash;&gt; -->
+        <!-- <activity -->
+        <!-- android:name=".userInfo.SignInActivity" -->
+        <!-- android:label="@string/app_name"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">
