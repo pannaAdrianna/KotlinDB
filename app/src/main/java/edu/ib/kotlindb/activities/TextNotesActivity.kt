@@ -248,6 +248,8 @@ class TextNotesActivity : AppCompatActivity() {
             Toast.makeText(this, "Edit click", Toast.LENGTH_SHORT).show()
             note.modificationDate= LocalDateTime.now()
             databaseHandler.updateTextNote(note)
+            modificationDate.text = note.getFormattedModificationDate()
+
         }
 
         customDialog.show()
