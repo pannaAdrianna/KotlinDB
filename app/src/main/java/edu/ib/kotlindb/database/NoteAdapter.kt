@@ -66,7 +66,9 @@ class NoteAdapter(val context: Context, private val items: ArrayList<Note>) :
 
         holder.note.setOnClickListener {
             if (context is AllNotesActivity) {
-                context.deleteRecordAlertDialog(item)
+//                context.deleteRecordAlertDialog(item)
+//                context.showDetails(item)
+
             }
 
         }

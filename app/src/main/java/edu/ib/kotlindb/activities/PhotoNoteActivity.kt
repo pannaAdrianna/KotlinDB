@@ -28,6 +28,7 @@ import edu.ib.kotlindb.R
 import android.graphics.Bitmap.CompressFormat
 import edu.ib.kotlindb.models.PhotoNote
 import java.io.ByteArrayOutputStream
+import java.time.LocalDateTime
 
 
 class PhotoNoteActivity : AppCompatActivity() {
@@ -326,7 +327,7 @@ class PhotoNoteActivity : AppCompatActivity() {
 
 
         val array : ByteArray = imageToBitmap(image)
-        var t = PhotoNote(0,"title from et","desc from et",array)
+        var t = PhotoNote(0,"title from et","desc from et",array, LocalDateTime.now())
         databaseHandler = DatabaseHandler(this)
         databaseHandler.addPhotoNote(t)
 

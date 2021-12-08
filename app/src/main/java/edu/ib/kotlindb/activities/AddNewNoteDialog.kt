@@ -16,6 +16,7 @@ import edu.ib.kotlindb.R
 
 
 import edu.ib.kotlindb.models.TextNote
+import java.time.LocalDateTime
 
 
 class AddNewNoteDialog : DialogFragment() {
@@ -67,7 +68,7 @@ class AddNewNoteDialog : DialogFragment() {
     }
 
     fun createNote(): TextNote {
-        return TextNote(0, title.text.toString(), desc.text.toString())
+        return TextNote(0, title.text.toString(), desc.text.toString(), LocalDateTime.now())
     }
 
 

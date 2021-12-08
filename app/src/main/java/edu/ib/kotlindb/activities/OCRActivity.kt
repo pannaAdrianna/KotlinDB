@@ -72,7 +72,7 @@ class OCRActivity : AppCompatActivity() {
     }
 
     fun onBtnAnalyzeClick(view: View) {
-        val intent = Intent(this, AnalyzeActivity::class.java)
+//        val intent = Intent(this, AnalyzeActivity::class.java)
         intent.putExtra(OCRActivity.MESSAGE, mResultEt?.text.toString())
         startActivity(intent)
 

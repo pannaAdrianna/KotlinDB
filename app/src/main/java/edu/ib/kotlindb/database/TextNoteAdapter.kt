@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.R
-import edu.ib.kotlindb.activities.TestList
+import edu.ib.kotlindb.activities.AllNotesActivity
 import edu.ib.kotlindb.activities.TextNotesActivity
 import edu.ib.kotlindb.models.TextNote
 
@@ -26,6 +27,8 @@ class TextNotesAdapter(val context: Context, private val items: ArrayList<TextNo
         val tvTitle: TextView = view.findViewById(R.id.tvTitle)
         val tvDesc: TextView = view.findViewById(R.id.tvDesc)
         val ivDelete: ImageView = view.findViewById(R.id.ivDelete)
+        var note: CardView = view.findViewById(R.id.item)
+
 
     }
 
@@ -42,7 +45,7 @@ class TextNotesAdapter(val context: Context, private val items: ArrayList<TextNo
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val item = items.get(position)
+        val item = items[position]
 
         holder.tvTitle.text = item.title
 
@@ -56,6 +59,14 @@ class TextNotesAdapter(val context: Context, private val items: ArrayList<TextNo
                 context.deleteRecordAlertDialog(item)
             }
 
+
+        }
+        holder.note.setOnClickListener {
+            if (context is TextNotesActivity) {
+//                context.deleteRecordAlertDialog(item)
+                context.showDetailsOfTextNote(item)
+
+            }
 
         }
 

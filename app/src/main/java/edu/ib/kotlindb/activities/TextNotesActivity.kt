@@ -7,10 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +16,7 @@ import edu.ib.kotlindb.R
 import edu.ib.kotlindb.database.TextNotesAdapter
 import edu.ib.kotlindb.models.TextNote
 import kotlinx.android.synthetic.main.dialog_add_new_text_note.*
+import java.time.LocalDateTime
 
 class TextNotesActivity : AppCompatActivity() {
 
@@ -98,13 +96,13 @@ class TextNotesActivity : AppCompatActivity() {
 
     private fun addSomeData() {
         databaseHandler.addTextNote(
-            TextNote(1, "Title Test 1", "DESC test 1")
+            TextNote(1, "Title Test 1", "DESC test 1", LocalDateTime.now())
         )
         databaseHandler.addTextNote(
-            TextNote(2, "Title Test 2", "DESC test 2")
+            TextNote(2, "Title Test 2", "DESC test 2",LocalDateTime.now())
         )
         databaseHandler.addTextNote(
-            TextNote(3, "Title Test 3", "DESC test 3")
+            TextNote(3, "Title Test 3", "DESC test 3",LocalDateTime.now())
         )
     }
 
@@ -125,7 +123,7 @@ class TextNotesActivity : AppCompatActivity() {
             val desc = customDialog.et_desc.text.toString()
 
 
-            databaseHandler.addTextNote(TextNote(0, title, desc))
+            databaseHandler.addTextNote(TextNote(0, title, desc, LocalDateTime.now()))
             setupListofDataIntoRecyclerView()
             Toast.makeText(this,"Added new note ${title}",Toast.LENGTH_SHORT).show()
 
@@ -188,7 +186,8 @@ class TextNotesActivity : AppCompatActivity() {
                 TextNote(
                     empModelClass.id,
                     "",
-                    ""
+                    "",
+                    empModelClass.getDate()
                 )
             )
             if (status > -1) {
@@ -212,6 +211,33 @@ class TextNotesActivity : AppCompatActivity() {
         // Set other dialog properties
         alertDialog.setCancelable(false) // Will not allow user to cancel after clicking on remaining screen area.
         alertDialog.show()  // show the dialog to UI
+    }
+
+    fun showDetailsOfTextNote(note: TextNote) {
+        val customDialog = Dialog(this)
+        customDialog.setContentView(R.layout.dialog_show_details)
+        customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        customDialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner);
+        customDialog!!.setCanceledOnTouchOutside(true);
+
+        val title = customDialog.findViewById(R.id.tv_note_title) as TextView
+        val desc = customDialog.findViewById(R.id.tv_note_desc) as TextView
+        val date = customDialog.findViewById(R.id.tv_note_date) as TextView
+        val btnedit = customDialog.findViewById(R.id.btn_edit_note) as Button
+        val ll_image = customDialog.findViewById(R.id.ll_details_image) as LinearLayout
+        title.text = note.title
+        desc.text = note.desc
+        date.text = note.getFormattedDate()
+        ll_image.visibility=View.GONE
+
+        databaseHandler = DatabaseHandler(this)
+
+        btnedit.setOnClickListener {
+            Toast.makeText(this, "show details edit click", Toast.LENGTH_SHORT).show()
+//            updateTextNote(note)
+        }
+
+        customDialog.show()
     }
 
 
