@@ -29,7 +29,6 @@ class TextNotesActivity : AppCompatActivity() {
     internal lateinit var btnChoose: FloatingActionButton
 
 
-
     internal var searchView: SearchView? = null
     val requestCSVcode = 1
     internal lateinit var myList: ArrayList<HashMap<String, String>>
@@ -58,12 +57,11 @@ class TextNotesActivity : AppCompatActivity() {
         }
         btnChoose.setOnClickListener {
 
-            Toast.makeText(this,"TA click on text",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "TA click on text", Toast.LENGTH_SHORT).show()
             chooseNoteType()
         }
 
     }
-
 
 
     private fun getBasicItemsList(): ArrayList<TextNote> {
@@ -71,6 +69,7 @@ class TextNotesActivity : AppCompatActivity() {
         databaseHandler = DatabaseHandler(this)
         //calling the viewEmployee method of DatabaseHandler class to read the records
         list = databaseHandler.viewTextNote()
+        list.sortByDescending { it.createdAt }
         return list
     }
 
@@ -96,13 +95,13 @@ class TextNotesActivity : AppCompatActivity() {
 
     private fun addSomeData() {
         databaseHandler.addTextNote(
-            TextNote(1, "Title Test 1", "DESC test 1", LocalDateTime.now())
+            TextNote(1, "Title Test 1", "DESC test 1", LocalDateTime.now(), LocalDateTime.now())
         )
         databaseHandler.addTextNote(
-            TextNote(2, "Title Test 2", "DESC test 2",LocalDateTime.now())
+            TextNote(2, "Title Test 2", "DESC test 2", LocalDateTime.now(), LocalDateTime.now())
         )
         databaseHandler.addTextNote(
-            TextNote(3, "Title Test 3", "DESC test 3",LocalDateTime.now())
+            TextNote(3, "Title Test 3", "DESC test 3", LocalDateTime.now(), LocalDateTime.now())
         )
     }
 
@@ -123,9 +122,12 @@ class TextNotesActivity : AppCompatActivity() {
             val desc = customDialog.et_desc.text.toString()
 
 
-            databaseHandler.addTextNote(TextNote(0, title, desc, LocalDateTime.now()))
+            databaseHandler.addTextNote(
+                TextNote(0, title, desc, LocalDateTime.now(),
+                LocalDateTime.now())
+            )
             setupListofDataIntoRecyclerView()
-            Toast.makeText(this,"Added new note ${title}",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Added new note ${title}", Toast.LENGTH_SHORT).show()
 
             customDialog.dismiss()
         }
@@ -143,13 +145,14 @@ class TextNotesActivity : AppCompatActivity() {
             when (view.getId()) {
                 R.id.radio_text_note ->
                     if (checked) {
-                        Toast.makeText(view.context,"Dialog Radio: text",Toast.LENGTH_LONG).show()
+                        Toast.makeText(view.context, "Dialog Radio: text", Toast.LENGTH_LONG).show()
                         addNewTextNoteAlertDialog()
                     }
                 R.id.radio_photo ->
                     if (checked) {
                         // Ninjas rule
-                        Toast.makeText(view.context,"Dialog Radio: photo",Toast.LENGTH_LONG).show()
+                        Toast.makeText(view.context, "Dialog Radio: photo", Toast.LENGTH_LONG)
+                            .show()
                         val intent = Intent(this, PhotoNoteActivity::class.java)
                         this.startActivity(intent)
                     }
@@ -161,7 +164,10 @@ class TextNotesActivity : AppCompatActivity() {
         val customDialog = Dialog(this)
         customDialog.setContentView(R.layout.dialog_choose_new_note_type)
 
-        customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        customDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         customDialog.window?.setBackgroundDrawableResource(R.drawable.round_corner);
         customDialog.setCanceledOnTouchOutside(true);
         customDialog.show()
@@ -187,7 +193,8 @@ class TextNotesActivity : AppCompatActivity() {
                     note.id,
                     "",
                     "",
-                    note.getDate()
+                    note.getCreationDate(),
+                    note.modificationDate
                 )
             )
             if (status > -1) {
@@ -216,25 +223,31 @@ class TextNotesActivity : AppCompatActivity() {
     fun showDetailsOfTextNote(note: TextNote) {
         val customDialog = Dialog(this)
         customDialog.setContentView(R.layout.dialog_show_details)
-        customDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        customDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         customDialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner);
         customDialog!!.setCanceledOnTouchOutside(true);
 
         val title = customDialog.findViewById(R.id.tv_note_title) as TextView
         val desc = customDialog.findViewById(R.id.tv_note_desc) as TextView
         val date = customDialog.findViewById(R.id.tv_note_date) as TextView
+        val modificationDate = customDialog.findViewById(R.id.tv_note_date_modified) as TextView
         val btnedit = customDialog.findViewById(R.id.btn_edit_note) as Button
         val ll_image = customDialog.findViewById(R.id.ll_details_image) as LinearLayout
         title.text = note.title
         desc.text = note.desc
-        date.text = note.getFormattedDate()
-        ll_image.visibility=View.GONE
+        date.text = note.getFormattedCreationDate()
+        modificationDate.text = note.getFormattedModificationDate()
+        ll_image.visibility = View.GONE
 
         databaseHandler = DatabaseHandler(this)
 
         btnedit.setOnClickListener {
-            Toast.makeText(this, "show details edit click", Toast.LENGTH_SHORT).show()
-//            updateTextNote(note)
+            Toast.makeText(this, "Edit click", Toast.LENGTH_SHORT).show()
+            note.modificationDate= LocalDateTime.now()
+            databaseHandler.updateTextNote(note)
         }
 
         customDialog.show()

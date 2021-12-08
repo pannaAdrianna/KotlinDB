@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-open class Note(open val id: Int = -1, open var title: String? = null, open var createdAt:LocalDateTime) {
+open class Note(open val id: Int = -1, open var title: String? = null, open var createdAt:LocalDateTime, open var modificationDate:LocalDateTime) {
 
 
     var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
@@ -16,14 +16,19 @@ open class Note(open val id: Int = -1, open var title: String? = null, open var 
     }
 
     private fun editDate(newDate: LocalDateTime) {
-        createdAt = LocalDateTime.parse(formatter.format(newDate))
+        createdAt = LocalDateTime.parse(formatter.format(modificationDate))
     }
 
-    fun getDate(): LocalDateTime {
+    fun getCreationDate(): LocalDateTime {
         return createdAt;
     }
-    fun getFormattedDate(): String {
+    fun getFormattedCreationDate(): String {
         return formatter.format(createdAt);
+    }
+
+
+    fun getFormattedModificationDate(): String {
+        return formatter.format(modificationDate);
     }
 
 

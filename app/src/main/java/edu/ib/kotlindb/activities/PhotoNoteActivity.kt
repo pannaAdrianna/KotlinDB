@@ -327,7 +327,7 @@ class PhotoNoteActivity : AppCompatActivity() {
 
 
         val array : ByteArray = imageToBitmap(image)
-        var t = PhotoNote(0,"title from et","desc from et",array, LocalDateTime.now())
+        var t = PhotoNote(0,"title from et","desc from et",array, LocalDateTime.now(), LocalDateTime.now())
         databaseHandler = DatabaseHandler(this)
         databaseHandler.addPhotoNote(t)
 

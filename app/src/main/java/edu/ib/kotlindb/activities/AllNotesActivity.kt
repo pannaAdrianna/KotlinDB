@@ -105,7 +105,8 @@ class AllNotesActivity : AppCompatActivity() {
                     note.id,
                     "",
                     "",
-                    note.getDate()
+                    note.getCreationDate(),
+                    note.modificationDate
                 )
             )
             if (status > -1) {
@@ -143,7 +144,7 @@ class AllNotesActivity : AppCompatActivity() {
         val btnedit = customDialog.findViewById(R.id.btn_edit_note) as Button
         title.text = note.title
         desc.text = note.desc
-        date.text = note.getDate().toString()
+        date.text = note.getCreationDate().toString()
 
         databaseHandler = DatabaseHandler(this)
 
@@ -179,7 +180,8 @@ class AllNotesActivity : AppCompatActivity() {
                             note.id,
                             new_title,
                             new_desc,
-                            note.getDate()
+                            note.getCreationDate(),
+                            note.modificationDate
                         )
                     )
                 if (status > -1) {
@@ -234,7 +236,7 @@ class AllNotesActivity : AppCompatActivity() {
             val desc = customDialog.et_desc.text.toString()
 
 
-            databaseHandler.addTextNote(TextNote(0, title, desc, LocalDateTime.now()))
+            databaseHandler.addTextNote(TextNote(0, title, desc, LocalDateTime.now(),LocalDateTime.now()))
             setupListofDataIntoRecyclerView()
             Toast.makeText(this, "Added new note ${title}", Toast.LENGTH_SHORT).show()
 

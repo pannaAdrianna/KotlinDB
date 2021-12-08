@@ -21,7 +21,7 @@ class DatabaseHandler(context: Context) :
 
     //    companion object
     companion object {
-        private val DATABASE_VERSION = 6
+        private val DATABASE_VERSION = 7
         private val DATABASE_NAME = "NotesDatabase"
 
 
@@ -35,6 +35,7 @@ class DatabaseHandler(context: Context) :
         private val KEY_DESC = "desc"
         private val KEY_IMAGE = "image"
         private val KEY_CREATED_DATE = "createdAt"
+        private val KEY_MODIFICATION_DATE = "modificationDate"
 
 
     }
@@ -43,14 +44,13 @@ class DatabaseHandler(context: Context) :
         //creating table with fields
 
 
-
         val CREATE_TEXTNOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_TEXT_NOTES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
-                + KEY_DESC + " TEXT," + KEY_CREATED_DATE +" TEXT"+")")
+                + KEY_DESC + " TEXT," + KEY_CREATED_DATE + " TEXT," + KEY_MODIFICATION_DATE + " TEXT" + ")")
         db?.execSQL(CREATE_TEXTNOTES_TABLE)
 
         val CREATE_PHOTONOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_PHOTO_NOTES + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_CREATED_DATE +" TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_CREATED_DATE + " TEXT,"
                 + KEY_IMAGE + " BLOB" + ")")
         db?.execSQL(CREATE_PHOTONOTES_TABLE)
     }
@@ -116,7 +116,8 @@ class DatabaseHandler(context: Context) :
                     title = title,
                     desc = "desc",
                     image = imgByte,
-                    createdAt = LocalDateTime.now()
+                    createdAt = LocalDateTime.now(),
+                    modificationDate = LocalDateTime.now(),
                 )
                 images.add(emp)
 
@@ -131,8 +132,6 @@ class DatabaseHandler(context: Context) :
     }
 
 
-
-
     fun addTextNote(note: TextNote): Long {
         val db = this.writableDatabase
 
@@ -140,6 +139,10 @@ class DatabaseHandler(context: Context) :
         contentValues.put(KEY_TITLE, note.title) // EmpModelClass Name
         contentValues.put(KEY_DESC, note.desc) // EmpModelClass Email
         contentValues.put(KEY_CREATED_DATE, note.createdAt.toString()) // EmpModelClass Email
+        contentValues.put(
+            KEY_MODIFICATION_DATE,
+            note.modificationDate.toString()
+        ) // EmpModelClass Email
 
         // Inserting employee details using insert query.
         val success = db.insert(TABLE_TEXT_NOTES, null, contentValues)
@@ -172,19 +175,24 @@ class DatabaseHandler(context: Context) :
         var id: Int
         var title: String
         var date: LocalDateTime
+        var mod: LocalDateTime
 
 
         if (cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
-                date = LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
+                date =
+                    LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
+                mod =
+                    LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(KEY_MODIFICATION_DATE)))
 
 
                 val note = Note(
                     id = id,
                     title = title,
-                    createdAt = date
+                    createdAt = date,
+                    modificationDate = mod
                 )
                 empList.add(note)
 
@@ -194,12 +202,12 @@ class DatabaseHandler(context: Context) :
     }
 
 
-
     fun updateTextNote(note: TextNote): Int {
         val db = this.writableDatabase
         val contentValues = ContentValues()
         contentValues.put(KEY_TITLE, note.title)
         contentValues.put(KEY_DESC, note.desc)
+        contentValues.put(KEY_MODIFICATION_DATE, note.modificationDate.toString())
 
         val success = db.update(TABLE_TEXT_NOTES, contentValues, KEY_ID + "=" + note.id, null)
         db.close()
@@ -231,6 +239,7 @@ class DatabaseHandler(context: Context) :
         var title: String
         var desc: String
         var createdAt: String
+        var mod: String
 
 
         if (cursor.moveToFirst()) {
@@ -239,12 +248,14 @@ class DatabaseHandler(context: Context) :
                 title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
                 desc = cursor.getString(cursor.getColumnIndex(KEY_DESC))
                 createdAt = (cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
+                mod = (cursor.getString(cursor.getColumnIndex(KEY_MODIFICATION_DATE)))
 
                 val emp = TextNote(
                     id = id,
                     title = title,
                     desc = desc,
-                    createdAt = LocalDateTime.parse(createdAt)
+                    createdAt = LocalDateTime.parse(createdAt),
+                    modificationDate = LocalDateTime.parse(mod)
                 )
                 empList.add(emp)
 
@@ -252,7 +263,6 @@ class DatabaseHandler(context: Context) :
         }
         return empList
     }
-
 
 
     /**
@@ -270,9 +280,6 @@ class DatabaseHandler(context: Context) :
         db.close()
         return success
     }
-
-
-
 
 
 }
