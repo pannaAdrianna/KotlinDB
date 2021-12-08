@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-open class Note(open val id: Int = -1, open var title: String? = null, open var createdAt:LocalDateTime= LocalDateTime.now()) {
+open class Note(open val id: Int = -1, open var title: String? = null, open var createdAt:LocalDateTime) {
 
 
     var formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")

@@ -21,22 +21,20 @@ class DatabaseHandler(context: Context) :
 
     //    companion object
     companion object {
-        private val DATABASE_VERSION = 2
+        private val DATABASE_VERSION = 6
         private val DATABASE_NAME = "NotesDatabase"
 
-        private val TABLE_CONTACTS = "EmployeeTable"
-        private val TABLE_PREGGO = "PreggoTable"
-        private val TABLE = "PregTable"
+
         private val TABLE_TEXT_NOTES = "TextNotesTable"
         private val TABLE_PHOTO_NOTES = "PhotoNotesTable"
 
         private val KEY_ID = "_id"
 
-        private val KEY_NAME = "name"
-        private val KEY_EMAIL = "email"
+
         private val KEY_TITLE = "title"
         private val KEY_DESC = "desc"
         private val KEY_IMAGE = "image"
+        private val KEY_CREATED_DATE = "createdAt"
 
 
     }
@@ -48,24 +46,16 @@ class DatabaseHandler(context: Context) :
 
         val CREATE_TEXTNOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_TEXT_NOTES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
-                + KEY_DESC + " TEXT" + ")")
+                + KEY_DESC + " TEXT," + KEY_CREATED_DATE +" TEXT"+")")
         db?.execSQL(CREATE_TEXTNOTES_TABLE)
 
         val CREATE_PHOTONOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_PHOTO_NOTES + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_CREATED_DATE +" TEXT,"
                 + KEY_IMAGE + " BLOB" + ")")
         db?.execSQL(CREATE_PHOTONOTES_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_CONTACTS")
-        onCreate(db)
-
-        db!!.execSQL("DROP TABLE IF EXISTS $TABLE_PREGGO")
-        onCreate(db)
-
-        db!!.execSQL("DROP TABLE IF EXISTS $TABLE")
-        onCreate(db)
 
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_TEXT_NOTES")
         onCreate(db)
@@ -117,7 +107,7 @@ class DatabaseHandler(context: Context) :
         if (cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
-                title = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
                 var imgByte = cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE))
                 BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
 
@@ -143,12 +133,13 @@ class DatabaseHandler(context: Context) :
 
 
 
-    fun addTextNote(emp: TextNote): Long {
+    fun addTextNote(note: TextNote): Long {
         val db = this.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(KEY_TITLE, emp.title) // EmpModelClass Name
-        contentValues.put(KEY_DESC, emp.desc) // EmpModelClass Email
+        contentValues.put(KEY_TITLE, note.title) // EmpModelClass Name
+        contentValues.put(KEY_DESC, note.desc) // EmpModelClass Email
+        contentValues.put(KEY_CREATED_DATE, note.createdAt.toString()) // EmpModelClass Email
 
         // Inserting employee details using insert query.
         val success = db.insert(TABLE_TEXT_NOTES, null, contentValues)
@@ -180,17 +171,20 @@ class DatabaseHandler(context: Context) :
 
         var id: Int
         var title: String
+        var date: LocalDateTime
 
 
         if (cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
+                date = LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
 
 
                 val note = Note(
                     id = id,
                     title = title,
+                    createdAt = date
                 )
                 empList.add(note)
 
@@ -236,18 +230,21 @@ class DatabaseHandler(context: Context) :
         var id: Int
         var title: String
         var desc: String
+        var createdAt: String
+
 
         if (cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
                 desc = cursor.getString(cursor.getColumnIndex(KEY_DESC))
+                createdAt = (cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
 
                 val emp = TextNote(
                     id = id,
                     title = title,
                     desc = desc,
-                    createdAt = LocalDateTime.now()
+                    createdAt = LocalDateTime.parse(createdAt)
                 )
                 empList.add(emp)
 

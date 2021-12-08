@@ -168,12 +168,12 @@ class TextNotesActivity : AppCompatActivity() {
     }
 
 
-    fun deleteRecordAlertDialog(empModelClass: TextNote) {
+    fun deleteRecordAlertDialog(note: TextNote) {
         val builder = AlertDialog.Builder(this)
         //set title for alert dialog
         builder.setTitle("Delete Record")
         //set message for alert dialog
-        builder.setMessage("Are you sure you wants to delete ${empModelClass.title}.")
+        builder.setMessage("Are you sure you wants to delete ${note.title}.")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
 
         //performing positive action
@@ -184,10 +184,10 @@ class TextNotesActivity : AppCompatActivity() {
             //calling the deleteEmployee method of DatabaseHandler class to delete record
             val status = databaseHandler.deleteTextNote(
                 TextNote(
-                    empModelClass.id,
+                    note.id,
                     "",
                     "",
-                    empModelClass.getDate()
+                    note.getDate()
                 )
             )
             if (status > -1) {
