@@ -1,5 +1,6 @@
 package edu.ib.kotlindb.activities
 
+
 import DatabaseHandler
 import android.app.Dialog
 import android.content.Intent
@@ -7,33 +8,31 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import edu.ib.kotlindb.R
-import edu.ib.kotlindb.database.NoteAdapter
 import edu.ib.kotlindb.models.Note
+import edu.ib.kotlindb.models.PhotoNote
 import edu.ib.kotlindb.models.TextNote
 import kotlinx.android.synthetic.main.dialog_add_new_text_note.*
-import kotlinx.android.synthetic.main.dialog_update.*
 import java.time.LocalDateTime
+import android.graphics.BitmapFactory
+import edu.ib.kotlindb.database.PhotoNoteAdapter
+
 
 class AllNotesActivity : AppCompatActivity() {
 
     internal lateinit var databaseHandler: DatabaseHandler
-    internal lateinit var list: ArrayList<Note>
+    internal lateinit var list: ArrayList<PhotoNote>
 
     internal lateinit var rvItemsList: RecyclerView
     internal lateinit var btnAdd: FloatingActionButton
 
 
     internal lateinit var btnChoose: FloatingActionButton
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +43,7 @@ class AllNotesActivity : AppCompatActivity() {
 
         btnAdd = findViewById(R.id.btnAddNewNote)
         btnChoose = findViewById(R.id.btnChoose)
+
         setupListofDataIntoRecyclerView()
 
 
@@ -61,17 +61,18 @@ class AllNotesActivity : AppCompatActivity() {
 
     }
 
-    private fun getBasicItemsList(): ArrayList<Note> {
+    private fun getNotes(): ArrayList<PhotoNote> {
         //creating the instance of DatabaseHandler class
         databaseHandler = DatabaseHandler(this)
         //calling the viewEmployee method of DatabaseHandler class to read the records
-        list = databaseHandler.viewNotes()
+        list = databaseHandler.viewPhotoNotes()
+        list.sortByDescending { it.modificationDate }
         return list
     }
 
 
     private fun setupListofDataIntoRecyclerView() {
-        if (getBasicItemsList().size == 0) {
+        if (getNotes().size == 0) {
             rvItemsList.visibility = View.GONE
         }
         refreshAdapter()
@@ -80,7 +81,7 @@ class AllNotesActivity : AppCompatActivity() {
 
     private fun refreshAdapter() {
         rvItemsList.layoutManager = LinearLayoutManager(this)
-        val itemAdapter = NoteAdapter(this, getBasicItemsList())
+        val itemAdapter = PhotoNoteAdapter(this,getNotes() )
         rvItemsList.adapter = itemAdapter
         itemAdapter.notifyDataSetChanged()
     }
@@ -132,35 +133,53 @@ class AllNotesActivity : AppCompatActivity() {
         alertDialog.show()  // show the dialog to UI
     }
 
-    fun showDetailsOfTextNote(note: TextNote) {
+    fun showDetailsOfPhotoNote(note: PhotoNote) {
         val customDialog = Dialog(this)
         customDialog.setContentView(R.layout.dialog_show_details)
+        customDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
         customDialog!!.window?.setBackgroundDrawableResource(R.drawable.round_corner);
         customDialog!!.setCanceledOnTouchOutside(true);
 
         val title = customDialog.findViewById(R.id.tv_note_title) as TextView
         val desc = customDialog.findViewById(R.id.tv_note_desc) as TextView
         val date = customDialog.findViewById(R.id.tv_note_date) as TextView
+        val modificationDate = customDialog.findViewById(R.id.tv_note_date_modified) as TextView
         val btnedit = customDialog.findViewById(R.id.btn_edit_note) as Button
+        val ll_image = customDialog.findViewById(R.id.ll_details_image) as LinearLayout
+        val image = customDialog.findViewById(R.id.iv_note_image) as ImageView
+
+        ll_image.visibility=View.VISIBLE
+        image.visibility=View.VISIBLE
+
         title.text = note.title
         desc.text = note.desc
-        date.text = note.getCreationDate().toString()
+        date.text = note.getFormattedCreationDate()
+        modificationDate.text = note.getFormattedModificationDate()
+        val bitmap = BitmapFactory.decodeByteArray(note.image, 0, note.image.size)
+        image.setImageBitmap(bitmap)
+
 
         databaseHandler = DatabaseHandler(this)
 
         btnedit.setOnClickListener {
-            Toast.makeText(this, "show details edit click", Toast.LENGTH_SHORT).show()
-            updateTextNote(note)
+            Toast.makeText(this, "Edit click", Toast.LENGTH_SHORT).show()
+            note.modificationDate= LocalDateTime.now()
+//            databaseHandler.updateTextNote(note)
+            modificationDate.text = note.getFormattedModificationDate()
+
         }
 
         customDialog.show()
     }
 
-    fun updateTextNote(note: TextNote) {
+
+   /* fun updateTextNote(note: PhotoNote) {
         val updateDialog = Dialog(this, R.style.Theme_Dialog)
         updateDialog.setCancelable(false)
-        /*Set the screen content from a layout resource.
-         The resource will be inflated, adding all top-level views to the screen.*/
+
         updateDialog.setContentView(R.layout.dialog_update)
 
         updateDialog.et_title.setText(note.title)
@@ -175,12 +194,13 @@ class AllNotesActivity : AppCompatActivity() {
 
             if (!new_title.isEmpty() && !new_desc.isEmpty()) {
                 val status =
-                    databaseHandler.updateTextNote(
-                        TextNote(
+                    databaseHandler.updatePhotoNote(
+                        PhotoNote(
                             note.id,
                             new_title,
                             new_desc,
-                            note.getCreationDate(),
+                            note.image,
+                            note.createdAt,
                             note.modificationDate
                         )
                     )
@@ -204,7 +224,7 @@ class AllNotesActivity : AppCompatActivity() {
         })
         //Start the dialog and display it on screen.
         updateDialog.show()
-    }
+    }*/
 
 
     private fun chooseNoteType() {

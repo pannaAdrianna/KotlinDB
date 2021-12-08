@@ -9,6 +9,12 @@ import edu.ib.kotlindb.models.Note
 import edu.ib.kotlindb.models.PhotoNote
 import edu.ib.kotlindb.models.TextNote
 import java.time.LocalDateTime
+import android.graphics.drawable.BitmapDrawable
+
+import android.graphics.Bitmap
+
+
+
 
 /**
  *
@@ -21,7 +27,7 @@ class DatabaseHandler(context: Context) :
 
     //    companion object
     companion object {
-        private val DATABASE_VERSION = 7
+        private val DATABASE_VERSION = 10
         private val DATABASE_NAME = "NotesDatabase"
 
 
@@ -50,7 +56,7 @@ class DatabaseHandler(context: Context) :
         db?.execSQL(CREATE_TEXTNOTES_TABLE)
 
         val CREATE_PHOTONOTES_TABLE = ("CREATE TABLE IF NOT EXISTS " + TABLE_PHOTO_NOTES + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_CREATED_DATE + " TEXT,"
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_CREATED_DATE + " TEXT,"+ KEY_MODIFICATION_DATE + " TEXT,"
                 + KEY_IMAGE + " BLOB" + ")")
         db?.execSQL(CREATE_PHOTONOTES_TABLE)
     }
@@ -72,6 +78,11 @@ class DatabaseHandler(context: Context) :
         val cv = ContentValues()
         cv.put(KEY_TITLE, item.title)
         cv.put(KEY_IMAGE, item.image)
+        cv.put(KEY_CREATED_DATE, item.createdAt.toString())
+        cv.put(KEY_MODIFICATION_DATE, item.modificationDate.toString())
+        cv.put(KEY_IMAGE, item.image)
+
+
         val success = db.insert(TABLE_PHOTO_NOTES, null, cv)
         db.close()
 
@@ -81,55 +92,7 @@ class DatabaseHandler(context: Context) :
     }
 
 
-    fun getImages(): ArrayList<PhotoNote> {
-        val images: ArrayList<PhotoNote> = ArrayList<PhotoNote>()
 
-        // Query to select all the records from the table.
-        val selectQuery = "SELECT  * FROM $TABLE_PHOTO_NOTES"
-
-        val db = this.readableDatabase
-        // Cursor is used to read the record one by one. Add them to data model class.
-        var cursor: Cursor? = null
-
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return ArrayList()
-        }
-
-        var id: Int
-        var title: String
-        var image: ByteArray
-        var description: String
-
-        if (cursor.moveToFirst()) {
-            do {
-                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
-                title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
-                var imgByte = cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE))
-                BitmapFactory.decodeByteArray(imgByte, 0, imgByte.size)
-
-                val emp = PhotoNote(
-                    id = id,
-                    title = title,
-                    desc = "desc",
-                    image = imgByte,
-                    createdAt = LocalDateTime.now(),
-                    modificationDate = LocalDateTime.now(),
-                )
-                images.add(emp)
-
-            } while (cursor.moveToNext())
-        }
-
-        println("\n\n\nIMAGES\n\n\n")
-        println(images)
-        return images
-
-
-    }
 
 
     fun addTextNote(note: TextNote): Long {
@@ -153,12 +116,12 @@ class DatabaseHandler(context: Context) :
     }
 
 
-    fun viewNotes(): ArrayList<Note> {
+    fun viewPhotoNotes(): ArrayList<PhotoNote> {
 
-        val empList: ArrayList<Note> = ArrayList<Note>()
+        val list: ArrayList<PhotoNote> = ArrayList<PhotoNote>()
 
         // Query to select all the records from the table.
-        val selectQuery = "SELECT  * FROM $TABLE_TEXT_NOTES"
+        val selectQuery = "SELECT  * FROM $TABLE_PHOTO_NOTES"
 
         val db = this.readableDatabase
         // Cursor is used to read the record one by one. Add them to data model class.
@@ -174,31 +137,34 @@ class DatabaseHandler(context: Context) :
 
         var id: Int
         var title: String
-        var date: LocalDateTime
-        var mod: LocalDateTime
+        var date: String
+        var mod: String
+        var im : ByteArray
 
 
         if (cursor.moveToFirst()) {
             do {
                 id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 title = cursor.getString(cursor.getColumnIndex(KEY_TITLE))
-                date =
-                    LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
-                mod =
-                    LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(KEY_MODIFICATION_DATE)))
+                date = (cursor.getString(cursor.getColumnIndex(KEY_CREATED_DATE)))
+                mod = (cursor.getString(cursor.getColumnIndex(KEY_MODIFICATION_DATE)))
+                im = cursor.getBlob(cursor.getColumnIndex(KEY_IMAGE))
 
 
-                val note = Note(
+
+                val note = PhotoNote(
                     id = id,
                     title = title,
-                    createdAt = date,
-                    modificationDate = mod
+                    createdAt = LocalDateTime.parse(date),
+                    modificationDate = LocalDateTime.parse(mod),
+                    image = im
+
                 )
-                empList.add(note)
+                list.add(note)
 
             } while (cursor.moveToNext())
         }
-        return empList
+        return list
     }
 
 

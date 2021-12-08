@@ -46,7 +46,7 @@ class TextNotesActivity : AppCompatActivity() {
         btnChoose = findViewById(R.id.btnChoose)
         searchView = findViewById(R.id.search_bar)
         setupListofDataIntoRecyclerView()
-        adapter = TextNotesAdapter(this, getBasicItemsList())
+        adapter = TextNotesAdapter(this, getTextNotes())
         rvItemsList.adapter = adapter;
 
 
@@ -64,12 +64,12 @@ class TextNotesActivity : AppCompatActivity() {
     }
 
 
-    private fun getBasicItemsList(): ArrayList<TextNote> {
+    private fun getTextNotes(): ArrayList<TextNote> {
         //creating the instance of DatabaseHandler class
         databaseHandler = DatabaseHandler(this)
         //calling the viewEmployee method of DatabaseHandler class to read the records
         list = databaseHandler.viewTextNote()
-        list.sortByDescending { it.createdAt }
+        list.sortByDescending { it.modificationDate }
         return list
     }
 
@@ -77,7 +77,7 @@ class TextNotesActivity : AppCompatActivity() {
     private fun setupListofDataIntoRecyclerView() {
 
         val tvNoRecordsAvailable: TextView = findViewById(R.id.tvNoRecordsAvailable)
-        if (getBasicItemsList().size == 0) {
+        if (getTextNotes().size == 0) {
             rvItemsList.visibility = View.GONE
             tvNoRecordsAvailable.visibility = View.VISIBLE
             addSomeData()
@@ -88,7 +88,7 @@ class TextNotesActivity : AppCompatActivity() {
 
     private fun refreshAdapter() {
         rvItemsList.layoutManager = LinearLayoutManager(this)
-        val itemAdapter = TextNotesAdapter(this, getBasicItemsList())
+        val itemAdapter = TextNotesAdapter(this, getTextNotes())
         rvItemsList.adapter = itemAdapter
         itemAdapter.notifyDataSetChanged()
     }

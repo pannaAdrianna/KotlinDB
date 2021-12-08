@@ -5,21 +5,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.ib.kotlindb.R
 import edu.ib.kotlindb.activities.AllNotesActivity
-import edu.ib.kotlindb.activities.TextNotesActivity
-import edu.ib.kotlindb.models.Note
-import edu.ib.kotlindb.models.TextNote
+import edu.ib.kotlindb.models.PhotoNote
 
-class NoteAdapter(val context: Context, private val items: ArrayList<Note>) :
-    RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class PhotoNoteAdapter(val context: Context, private val items: ArrayList<PhotoNote>) :
+    RecyclerView.Adapter<PhotoNoteAdapter.ViewHolder>() {
     /**
      * A ViewHolder describes an item view and metadata about its place within the RecyclerView.
      */
@@ -33,7 +29,7 @@ class NoteAdapter(val context: Context, private val items: ArrayList<Note>) :
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoNoteAdapter.ViewHolder {
         return ViewHolder(
             LayoutInflater.from(context).inflate(
                 R.layout.rv_row_item_note,
@@ -51,7 +47,7 @@ class NoteAdapter(val context: Context, private val items: ArrayList<Note>) :
         return items.size
     }
 
-    override fun onBindViewHolder(holder: NoteAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PhotoNoteAdapter.ViewHolder, position: Int) {
 
         val item = items[position]
 
@@ -66,6 +62,7 @@ class NoteAdapter(val context: Context, private val items: ArrayList<Note>) :
 
         holder.note.setOnClickListener {
             if (context is AllNotesActivity) {
+                context.showDetailsOfPhotoNote(item)
 //                context.deleteRecordAlertDialog(item)
 //                context.showDetails(item)
 

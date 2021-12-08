@@ -53,43 +53,44 @@
                         android:text="Note desc text" />
 
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="onAddPhotoToNoteClick"
-                        android:orientation="vertical"
-                        android:padding="0sp">
 
-                        <!--                        Add image button-->
-                        <LinearLayout
-                            android:id="@+id/ll_add_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onClick="onAddPhotoToNoteClick"
-                            android:orientation="vertical"
-                            android:padding="0sp"
-
-                            android:visibility="visible">
-
-                            <ImageButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:onClick="onAddPhotoToNoteClick"
-                                android:src="@drawable/ic_add_photo"
-                                android:text="Add image" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Add image"
-                                android:textSize="12sp"
-
-                                />
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onAddPhotoToNoteClick"
+                android:orientation="vertical"
+                android:padding="0sp">
+
+                <!--                        Add image button-->
+                <LinearLayout
+                    android:id="@+id/ll_add_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onAddPhotoToNoteClick"
+                    android:orientation="vertical"
+                    android:padding="0sp"
+
+                    android:visibility="visible">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="onAddPhotoToNoteClick"
+                        android:src="@drawable/ic_add_photo"
+                        android:text="Add image" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add image"
+                        android:textSize="12sp"
+
+                        />
+                </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
 
@@ -131,7 +132,7 @@
                     android:id="@+id/ivImageNote"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxHeight="25sp" />
+                    android:maxHeight="200sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

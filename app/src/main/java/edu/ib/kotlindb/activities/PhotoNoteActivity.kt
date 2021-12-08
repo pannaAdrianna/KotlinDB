@@ -1,5 +1,6 @@
 package edu.ib.kotlindb.activities
 
+
 import DatabaseHandler
 import android.Manifest
 import android.app.Activity
@@ -29,6 +30,11 @@ import android.graphics.Bitmap.CompressFormat
 import edu.ib.kotlindb.models.PhotoNote
 import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
+import android.database.CursorWindow
+import edu.ib.kotlindb.userInfo.AccountDashboard
+
+import java.lang.Exception
+import java.lang.reflect.Field
 
 
 class PhotoNoteActivity : AppCompatActivity() {
@@ -36,8 +42,10 @@ class PhotoNoteActivity : AppCompatActivity() {
     internal lateinit var databaseHandler: DatabaseHandler
 
 
+
     companion object {
-        var mResultEt: EditText? = null
+        var et_title: EditText? = null
+        var et_desc: EditText? = null
         var mPreviewIv: ImageView? = null
         lateinit var image: ImageView
         var btnAddPhoto: LinearLayout? = null
@@ -63,7 +71,8 @@ class PhotoNoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_note)
 
-        mResultEt = findViewById(R.id.resultEt)
+        et_title = findViewById(R.id.et_title)
+        et_desc = findViewById(R.id.et_desc)
         mPreviewIv = findViewById(R.id.ivImage)
         image = findViewById(R.id.ivImageNote)
         btnAddPhoto = findViewById(R.id.ll_add_image)
@@ -277,6 +286,9 @@ class PhotoNoteActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 val resultUri = result.uri // get image uri
 
+                imagePreview?.visibility = View.VISIBLE
+                btnAddPhoto?.visibility = View.GONE
+                btnAdd?.visibility = View.VISIBLE
                 // setting image to ImV
                 mPreviewIv!!.setImageURI(resultUri)
                 image!!.setImageURI(resultUri)
@@ -314,30 +326,40 @@ class PhotoNoteActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Add photo click", Toast.LENGTH_SHORT).show()
         showImageImportDialog()
-        if (image != null) {
-            imagePreview?.visibility = View.VISIBLE
-            btnAddPhoto?.visibility = View.GONE
-            btnAdd?.visibility = View.VISIBLE
-        }
+
 
     }
 
     fun onBtnAddNePhotoNoteClick(view: android.view.View) {
-        Toast.makeText(this, "Add new photo note", Toast.LENGTH_SHORT).show()
 
 
-        val array : ByteArray = imageToBitmap(image)
-        var t = PhotoNote(0,"title from et","desc from et",array, LocalDateTime.now(), LocalDateTime.now())
+        val array: ByteArray = imageToBitmap(image)
+        var t = PhotoNote(
+            0,
+            et_title?.text.toString(),
+            et_desc?.text.toString(),
+            array,
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        )
         databaseHandler = DatabaseHandler(this)
-        databaseHandler.addPhotoNote(t)
+        val message = databaseHandler.addPhotoNote(t)
+        Toast.makeText(this, "Added new photo $message", Toast.LENGTH_SHORT).show()
+
+        val intent = Intent(this, MainActivity::class.java)
+        this.startActivity(intent)
 
 
     }
 
     private fun imageToBitmap(image: ImageView): ByteArray {
+
         val bitmap = (image.drawable as BitmapDrawable).bitmap
         val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+
+
+
 
         return stream.toByteArray()
     }
